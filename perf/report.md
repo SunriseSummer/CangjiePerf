@@ -28,22 +28,22 @@ _Generated: 2026-04-25T12:29:10+00:00_
 
 | Benchmark | Category | Cangjie | C++ | Python | Fastest |
 |---|---|---|---|---|---|
-| **fibonacci** | micro | 25.54 ms | 3.74 ms | 290.13 ms | C++ |
-| **sort** ⚠️ | **micro** | **2.277 s** | **146.86 ms** | **821.31 ms** | **C++** |
-| **hashmap_ops** ⚠️ | **micro** | **469.78 ms** | **115.22 ms** | **122.79 ms** | **C++** |
-| **string_concat** ⚠️ | **micro** | **46.58 ms** | **27.61 ms** | **76.30 ms** | **C++** |
-| **closure_sum** ⚠️ | **micro** | **96.86 ms** | **9.57 ms** | **343.53 ms** | **C++** |
-| **enum_eval** | micro | 601.60 ms | 137.33 ms | 5.236 s | C++ |
-| **regex_search** ⚠️ | **micro** | **44.89 ms** | **77.49 ms** | **39.07 ms** | **Python** |
-| **math_loop** | micro | 142.26 ms | 84.82 ms | 982.51 ms | C++ |
-| **prime_sieve** ⚠️ | **micro** | **1.563 s** | **54.25 ms** | **3.123 s** | **C++** |
-| **quicksort** ⚠️ | **micro** | **2.382 s** | **134.92 ms** | **3.802 s** | **C++** |
-| **mandelbrot** | apps | 282.85 ms | 101.47 ms | 3.873 s | C++ |
-| **nbody** | apps | 71.86 ms | 14.77 ms | 1.206 s | C++ |
-| **binary_trees** | apps | 126.01 ms | 63.81 ms | 840.50 ms | C++ |
-| **matrix_multiply** ⚠️ | **apps** | **897.94 ms** | **11.44 ms** | **803.21 ms** | **C++** |
-| **word_count** ⚠️ | **apps** | **672.91 ms** | **21.31 ms** | **132.77 ms** | **C++** |
-| **spectral_norm** ⚠️ | **apps** | **2.219 s** | **146.14 ms** | **16.947 s** | **C++** |
+| fibonacci | micro | 25.54 ms | 3.74 ms | 290.13 ms | C++ |
+| sort ⚠️ | micro | 2.277 s | 146.86 ms | 821.31 ms | C++ |
+| hashmap_ops ⚠️ | micro | 469.78 ms | 115.22 ms | 122.79 ms | C++ |
+| string_concat | micro | 46.58 ms | 27.61 ms | 76.30 ms | C++ |
+| closure_sum | micro | 96.86 ms | 9.57 ms | 343.53 ms | C++ |
+| enum_eval | micro | 601.60 ms | 137.33 ms | 5.236 s | C++ |
+| regex_search | micro | 44.89 ms | 77.49 ms | 39.07 ms | Python |
+| math_loop | micro | 142.26 ms | 84.82 ms | 982.51 ms | C++ |
+| prime_sieve ⚠️ | micro | 1.563 s | 54.25 ms | 3.123 s | C++ |
+| quicksort ⚠️ | micro | 2.382 s | 134.92 ms | 3.802 s | C++ |
+| mandelbrot | apps | 282.85 ms | 101.47 ms | 3.873 s | C++ |
+| nbody | apps | 71.86 ms | 14.77 ms | 1.206 s | C++ |
+| binary_trees | apps | 126.01 ms | 63.81 ms | 840.50 ms | C++ |
+| matrix_multiply ⚠️ | apps | 897.94 ms | 11.44 ms | 803.21 ms | C++ |
+| word_count ⚠️ | apps | 672.91 ms | 21.31 ms | 132.77 ms | C++ |
+| spectral_norm ⚠️ | apps | 2.219 s | 146.14 ms | 16.947 s | C++ |
 
 > **Bold rows** marked with ⚠️ are benchmarks where Cangjie's timing is closer (in log scale) to Python's than to C++'s — i.e. cases where the Cangjie implementation is significantly under-performing the native baseline. See [`analyse.md`](./analyse.md) for the root-cause analysis.
 
