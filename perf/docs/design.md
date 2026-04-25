@@ -56,7 +56,7 @@ process — see `samples_ms` in `results.json`.
 
 | Language | Tool      | Command                                           | Optimization |
 |----------|-----------|---------------------------------------------------|--------------|
-| Cangjie  | `cjpm`    | `cjpm build` (cwd = benchmark dir)                | `-O2` set in each benchmark's `cjpm.toml` under `[profile.build] compile-option` |
+| Cangjie  | `cjpm`    | `cjpm build` (cwd = benchmark dir)                | `-O2` set in each benchmark's `cjpm.toml` under `[package] compile-option` |
 | C++      | `g++`     | `g++ -O2 -std=c++17 -pipe <src>.cpp -o build/cpp/<name>/<name> -lm` | `-O2` |
 | Rust     | `rustc`   | `rustc -O --edition=2021 <src>.rs -o build/rust/<name>/<name>` | `-O` (release-equivalent `opt-level=3`) |
 | Go       | `go`      | `go build -o build/go/<name>/<name> <src>.go`     | default release optimization (no `-N -l`) |
@@ -66,8 +66,8 @@ process — see `samples_ms` in `results.json`.
 
 The Cangjie team's recommended way to build production code is via the
 project manager `cjpm`, with optimization configured in `cjpm.toml`. This
-matches how a real Cangjie project would be shipped (the `[profile.build]`
-section enables `-O2` for *every* package automatically) and means each
+matches how a real Cangjie project would be shipped (the `compile-option`
+field under `[package]` enables `-O2` automatically) and means each
 benchmark is itself a self-contained miniature Cangjie project that you can
 inspect / tweak / build / run on its own.
 
@@ -141,7 +141,7 @@ Suppose you want to add a benchmark called `regex_search` under `apps/`:
      regex_search.py
    ```
 2. **Write `cjpm.toml`** following the same template as existing benchmarks
-   (don't forget `[profile.build] compile-option = "-O2"`).
+   (don't forget `compile-option = "-O2"` under `[package]`).
 3. **Implement** the kernel in each language. The kernel must:
    * accept its problem size from `argv`;
    * time only the hot path with a monotonic clock;

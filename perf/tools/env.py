@@ -72,7 +72,7 @@ def detect_cangjie() -> Toolchain:
 
     We require both ``cjc`` (compiler) and ``cjpm`` (project manager) because
     we drive Cangjie builds through ``cjpm build`` so that each benchmark's
-    ``cjpm.toml`` (with ``[profile.build] compile-option = "-O2"``) applies.
+    ``cjpm.toml`` (with ``compile-option = "-O2"`` under ``[package]``) applies.
     """
     cjc = shutil.which("cjc")
     cjpm = shutil.which("cjpm")
