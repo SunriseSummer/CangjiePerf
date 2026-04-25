@@ -1,0 +1,134 @@
+{
+  "_comment": [
+    "Benchmark catalog for CangjiePerf.",
+    "Each benchmark is implemented in three languages (Cangjie/Python/C++).",
+    "Each implementation prints exactly two trailing lines to stdout:",
+    "  CHECKSUM:<string>",
+    "  ELAPSED_MS:<float>",
+    "The runner verifies CHECKSUM is identical across implementations of the",
+    "same benchmark, and uses ELAPSED_MS as the measurement.",
+    "",
+    "Sizes are chosen so the full suite finishes in roughly one minute on a",
+    "modern laptop. Override per-benchmark via 'sizes' in this file or via",
+    "--size on the command line."
+  ],
+  "defaults": {
+    "warmup": 1,
+    "iterations": 5,
+    "languages": ["cangjie", "python", "cpp"]
+  },
+  "benchmarks": [
+    {
+      "name": "fibonacci",
+      "category": "micro",
+      "title": "Recursive Fibonacci (function call / recursion)",
+      "description": "Pure recursive fib(N). Stresses function-call overhead and integer arithmetic. No standard-library involvement beyond integers.",
+      "args": ["32"]
+    },
+    {
+      "name": "sort",
+      "category": "micro",
+      "title": "Sort 2M integers (stdlib sort)",
+      "description": "Generate 2,000,000 deterministic pseudo-random Int64 values then sort ascending using the language's standard sort. Stresses standard library sorting and dynamic arrays.",
+      "args": ["2000000"]
+    },
+    {
+      "name": "hashmap_ops",
+      "category": "micro",
+      "title": "HashMap insert + lookup (stdlib hash table)",
+      "description": "Insert N (string,int) pairs then look up the same N keys. Stresses hash maps, string hashing, and string allocation.",
+      "args": ["500000"]
+    },
+    {
+      "name": "string_concat",
+      "category": "micro",
+      "title": "String building (stdlib StringBuilder)",
+      "description": "Build a single large string from N small fragments using the recommended efficient builder for each language. Stresses string buffers and memory growth.",
+      "args": ["500000"]
+    },
+    {
+      "name": "closure_sum",
+      "category": "micro",
+      "title": "Closure / higher-order pipeline",
+      "description": "Apply a map -> filter -> reduce pipeline of closures over N integers. Stresses higher-order function dispatch, closure allocation, and integer arithmetic.",
+      "args": ["2000000"]
+    },
+    {
+      "name": "enum_eval",
+      "category": "micro",
+      "title": "Enum / pattern matching (AST evaluation)",
+      "description": "Build a recursive arithmetic expression tree of depth D and evaluate it N times via recursive pattern matching on a sum-type enum (Num | Add | Sub | Mul). Stresses algebraic data types, recursive calls, and tag dispatch.",
+      "args": ["18", "60"]
+    },
+    {
+      "name": "regex_search",
+      "category": "micro",
+      "title": "Regex find-all (stdlib regex)",
+      "description": "Run a non-trivial alternation regex (date | email | capitalized word) across REPEATS copies of a sample paragraph. Stresses the standard regex engine.",
+      "args": ["4000"]
+    },
+    {
+      "name": "math_loop",
+      "category": "micro",
+      "title": "Math-intensive loop (sin/cos/sqrt/exp)",
+      "description": "Sum sin(x)*cos(x)+sqrt(x+1)-exp(-x) over N points. Stresses the math standard library and floating-point throughput.",
+      "args": ["5000000"]
+    },
+    {
+      "name": "prime_sieve",
+      "category": "micro",
+      "title": "Sieve of Eratosthenes",
+      "description": "Classic Sieve of Eratosthenes up to N on a one-byte-per-cell boolean array, then count primes and sum them mod 2^31. Algorithmically identical across all three languages: same loop bounds, same inner stride, same checksum formula.",
+      "args": ["20000000"]
+    },
+    {
+      "name": "quicksort",
+      "category": "micro",
+      "title": "Hand-written quicksort",
+      "description": "Lomuto-partition quicksort with middle-element pivot and recurse-smaller-side / iterate-larger-side, implemented by hand in all three languages so the algorithm itself is identical (complements the stdlib `sort` benchmark).",
+      "args": ["1500000"]
+    },
+    {
+      "name": "mandelbrot",
+      "category": "apps",
+      "title": "Mandelbrot set (numerical kernel)",
+      "description": "Compute a Mandelbrot escape-time bitmap of size W*W with up to MAX_ITER iterations. Inspired by the Computer Language Benchmarks Game. Stresses tight numeric loops and floating-point arithmetic.",
+      "args": ["600", "200"]
+    },
+    {
+      "name": "nbody",
+      "category": "apps",
+      "title": "N-Body simulation (numerical kernel)",
+      "description": "Symplectic integrator for the classic 5-body solar system from the Benchmarks Game over N steps. Stresses tight floating-point loops and array indexing.",
+      "args": ["200000"]
+    },
+    {
+      "name": "binary_trees",
+      "category": "apps",
+      "title": "Binary trees (allocation / GC pressure)",
+      "description": "Build and check many small balanced binary trees up to depth D. Adapted from the Computer Language Benchmarks Game. Stresses small-object allocation and GC (or heap allocator).",
+      "args": ["14"]
+    },
+    {
+      "name": "matrix_multiply",
+      "category": "apps",
+      "title": "Matrix multiplication (naive O(N^3))",
+      "description": "Compute C = A * B for two NxN double-precision matrices using the textbook triple-loop algorithm. Stresses memory layout, FP multiply-add throughput, and cache behaviour.",
+      "args": ["250"]
+    },
+    {
+      "name": "word_count",
+      "category": "apps",
+      "title": "Word count (text processing)",
+      "description": "Tokenize a synthesized N-word text and count word frequencies in a hash-map. Stresses string slicing/comparison, hashing, and hash-map updates — a typical scripting workload.",
+      "args": ["1000000"]
+    },
+    {
+      "name": "spectral_norm",
+      "category": "apps",
+      "title": "Spectral norm (CLBG numerical kernel)",
+      "description": "Approximates the largest eigenvalue of an infinite matrix A[i][j] = 1 / ((i+j)(i+j+1)/2 + i + 1) via 10 power iterations of v <- A^T A v. Adapted from the Computer Language Benchmarks Game; algorithmically identical across all three languages.",
+      "args": ["1500"]
+    }
+  ]
+}

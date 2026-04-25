@@ -1,0 +1,7 @@
+# CangjiePerf build / generated artifacts
+perf/build/
+perf/results/
+perf/benchmarks/**/target/
+perf/benchmarks/**/cjpm.lock
+__pycache__/
+*.pyc
