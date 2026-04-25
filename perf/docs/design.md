@@ -157,8 +157,15 @@ Suppose you want to add a benchmark called `regex_search` under `apps/`:
 | `sort`           | stdlib sort, dynamic array indexing, comparator dispatch           |
 | `hashmap_ops`    | hash function quality, collision handling, string allocation       |
 | `string_concat`  | `StringBuilder` / amortized buffer growth, allocator behavior      |
+| `closure_sum`    | closure dispatch, higher-order iteration, integer arithmetic       |
+| `enum_eval`      | algebraic data types, recursive `match` dispatch, tag-tag chains   |
+| `regex_search`   | the language's regex engine (NFA/DFA), backtracking, alternation   |
+| `math_loop`      | `sin`/`cos`/`sqrt`/`exp` performance and FP throughput              |
 | `mandelbrot`     | tight nested numeric loop, FP arithmetic, branch prediction         |
 | `nbody`          | small-array data layout, FP multiply-add density, `sqrt` cost      |
+| `binary_trees`   | small-object allocation rate, GC throughput / heap allocator       |
+| `matrix_multiply`| memory layout, FP multiply-add throughput, cache behaviour          |
+| `word_count`     | string slicing/comparison, hashing, hash-map updates               |
 
 This selection covers the most common day-to-day perf concerns when picking
 a language for either systems-style or scripting-style code, while staying

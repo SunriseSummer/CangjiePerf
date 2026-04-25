@@ -12,11 +12,21 @@ implemented in three languages:
 The suite covers two flavors of comparison:
 
 1. **Micro-benchmarks** — single-feature / standard-library shoot-outs:
-   recursion (Fibonacci), stdlib sort on 2M integers, hash-map insert+lookup,
-   `StringBuilder`-style string composition.
-2. **Application-style benchmarks** — small, realistic numerical kernels in
-   the spirit of [Computer Language Benchmarks Game]: the **Mandelbrot set**
-   and the classic **N-Body** 5-planet solar-system simulation.
+   * `fibonacci` — recursion / function-call overhead.
+   * `sort` — stdlib sort on 2M Int64.
+   * `hashmap_ops` — string→int hash-map insert + lookup.
+   * `string_concat` — `StringBuilder`-style string composition.
+   * `closure_sum` — closures + map/filter/reduce-style higher-order pipeline.
+   * `enum_eval` — algebraic data types & recursive pattern matching (AST eval).
+   * `regex_search` — stdlib regex find-all over a non-trivial alternation pattern.
+   * `math_loop` — `sin`/`cos`/`sqrt`/`exp` tight loop (math stdlib).
+2. **Application-style benchmarks** — small, realistic kernels in the spirit
+   of the [Computer Language Benchmarks Game]:
+   * `mandelbrot` — Mandelbrot escape-time bitmap.
+   * `nbody` — 5-body solar-system symplectic integrator.
+   * `binary_trees` — heap-allocation / GC-pressure stress test.
+   * `matrix_multiply` — naive O(N³) double-precision matmul.
+   * `word_count` — typical text-processing app (tokenize + hash-map count).
 
 [Computer Language Benchmarks Game]: https://benchmarksgame-team.pages.debian.net/benchmarksgame/
 
@@ -81,14 +91,21 @@ perf/
 │   │   │   └── fibonacci.py
 │   │   ├── sort/                    # 2M Int64 stdlib-sort
 │   │   ├── hashmap_ops/             # 500k string→int insert + lookup
-│   │   └── string_concat/           # 500k fragments via StringBuilder
+│   │   ├── string_concat/           # 500k fragments via StringBuilder
+│   │   ├── closure_sum/             # higher-order map/filter/reduce
+│   │   ├── enum_eval/               # ADT + recursive pattern match (AST eval)
+│   │   ├── regex_search/            # stdlib regex find-all
+│   │   └── math_loop/               # sin/cos/sqrt/exp tight loop
 │   └── apps/
 │       ├── mandelbrot/              # 600x600, 200 iters
-│       └── nbody/                   # 5-body, 200 000 steps
+│       ├── nbody/                   # 5-body, 200 000 steps
+│       ├── binary_trees/            # depth 14 — alloc/GC pressure
+│       ├── matrix_multiply/         # 250×250 double matmul
+│       └── word_count/              # 1M words tokenize + count
 ├── docs/
 │   └── design.md                    # detailed design / extension guide
 ├── results/                         # raw JSON + build logs (generated)
-└── report.md                        # final comparison report (generated)
+└── report.md                        # final comparison report (committed)
 ```
 
 ---

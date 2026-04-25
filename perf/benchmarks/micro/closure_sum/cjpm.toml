@@ -1,0 +1,9 @@
+[package]
+  cjc-version = "1.0.5"
+  name = "closure_sum"
+  version = "1.0.0"
+  output-type = "executable"
+
+# O2 optimization for benchmark fairness vs `g++ -O2`.
+[profile.build]
+  compile-option = "-O2"
