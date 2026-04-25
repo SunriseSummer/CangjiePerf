@@ -3,7 +3,7 @@
 Each benchmark directory layout:
 
   <benchmark>/
-    cjpm.toml         # Cangjie package config (sets [profile.build] -O2)
+    cjpm.toml         # Cangjie package config (sets compile-option = "-O2" under [package])
     src/main.cj       # Cangjie implementation
     <name>.cpp        # C++ implementation     (built with `g++ -O2 -std=c++17`)
     <name>.py         # Python implementation  (run directly with `python3`)
@@ -127,10 +127,10 @@ def build_rust(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
 def build_cangjie(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
     """Build a Cangjie benchmark via ``cjpm build``.
 
-    The benchmark's ``cjpm.toml`` configures ``[profile.build] compile-option =
-    "-O2"`` so this is equivalent to invoking ``cjc -O2`` but driven through
-    the canonical project-manager workflow, matching how a real Cangjie
-    project would be built and shipped.
+    The benchmark's ``cjpm.toml`` sets ``compile-option = "-O2"`` directly
+    under ``[package]``, so this is equivalent to invoking ``cjc -O2`` but
+    driven through the canonical project-manager workflow, matching how a real
+    Cangjie project would be built and shipped.
     """
     bench_dir = benchmark_dir(category, name)
     toml = bench_dir / "cjpm.toml"
