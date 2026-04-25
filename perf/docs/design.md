@@ -56,25 +56,20 @@ process — see `samples_ms` in `results.json`.
 
 | Language | Tool      | Command                                           | Optimization |
 |----------|-----------|---------------------------------------------------|--------------|
-| Cangjie  | `cjpm`    | `cjpm build` (cwd = benchmark dir)                | `-O2` set in each benchmark's `cjpm.toml` under `[profile.build] compile-option` |
+| Cangjie  | `cjc`     | `cjc <name>.cj -O2 -o build/cangjie/<name>/<name>` | `-O2` |
 | C++      | `g++`     | `g++ -O2 -std=c++17 -pipe <src>.cpp -o build/cpp/<name>/<name> -lm` | `-O2` |
 | Rust     | `rustc`   | `rustc -O --edition=2021 <src>.rs -o build/rust/<name>/<name>` | `-O` (release-equivalent `opt-level=3`) |
 | Go       | `go`      | `go build -o build/go/<name>/<name> <src>.go`     | default release optimization (no `-N -l`) |
 | Python   | `python3` | n/a (interpreted)                                 | none — bare CPython, no `-O` |
 
-### Why `cjpm` (not `cjc` directly)?
+### Why `cjc` directly (not `cjpm`)?
 
-The Cangjie team's recommended way to build production code is via the
-project manager `cjpm`, with optimization configured in `cjpm.toml`. This
-matches how a real Cangjie project would be shipped (the `[profile.build]`
-section enables `-O2` for *every* package automatically) and means each
-benchmark is itself a self-contained miniature Cangjie project that you can
-inspect / tweak / build / run on its own.
-
-`cjpm`'s default release output path is
-`<project>/target/release/bin/main`. The Python builder then copies this
-binary to `perf/build/cangjie/<benchmark>/<benchmark>` so the runner can
-invoke it by a stable path.
+Each Cangjie benchmark is a single `<name>.cj` source file, mirroring the
+flat layout of the C++ (`<name>.cpp`), Rust (`<name>.rs`), and Go
+(`<name>.go`) implementations. Invoking `cjc <name>.cj -O2 -o <out>`
+directly is the simplest and most transparent build path — it applies the
+same optimization level (`-O2`) as the C++ toolchain without requiring any
+project-management config files.
 
 ---
 
@@ -133,22 +128,19 @@ Suppose you want to add a benchmark called `regex_search` under `apps/`:
 1. **Create the directory and all five implementations**:
    ```
    perf/benchmarks/apps/regex_search/
-     cjpm.toml
-     src/main.cj
+     regex_search.cj
      regex_search.cpp
      regex_search.rs
      regex_search.go
      regex_search.py
    ```
-2. **Write `cjpm.toml`** following the same template as existing benchmarks
-   (don't forget `[profile.build] compile-option = "-O2"`).
-3. **Implement** the kernel in each language. The kernel must:
+2. **Implement** the kernel in each language. The kernel must:
    * accept its problem size from `argv`;
    * time only the hot path with a monotonic clock;
    * print `CHECKSUM:<x>` then `ELAPSED_MS:<x>` on the last two lines.
-4. **Register** the benchmark in `config/benchmarks.json` with a description
+3. **Register** the benchmark in `config/benchmarks.json` with a description
    and a default args list.
-5. **Verify**: `python3 perf/run.py --filter regex_search`. The runner
+4. **Verify**: `python3 perf/run.py --filter regex_search`. The runner
    will fail loudly if the `CHECKSUM`s differ across languages, helping you
    prove the implementations compute the same thing.
 

@@ -5,7 +5,7 @@ implemented in five languages:
 
 | Language | Toolchain      | Build mode                          |
 |----------|----------------|-------------------------------------|
-| Cangjie  | `cjc` + `cjpm` | `cjpm build` with `-O2` (per `cjpm.toml`) |
+| Cangjie  | `cjc`          | `cjc <name>.cj -O2` (single-file)  |
 | C++      | `g++`          | `g++ -O2 -std=c++17`                |
 | Rust     | `rustc`        | `rustc -O --edition=2021` (release-equivalent `opt-level=3`) |
 | Go       | `go`           | `go build` (default release optimization) |
@@ -52,7 +52,7 @@ immediately visible at a glance.
 #      g++       (for C++ benchmarks)
 #      rustc     (for Rust benchmarks)
 #      go        (for Go benchmarks)
-#      cjc cjpm  (for Cangjie benchmarks; install from the SDK referenced
+#      cjc       (for Cangjie benchmarks; install from the SDK referenced
 #                 in the project's top-level .resource file)
 
 # 2. Run everything (build + run + report):
@@ -65,8 +65,8 @@ This will:
 * build every C++ implementation with `g++ -O2 -std=c++17`,
 * build every Rust implementation with `rustc -O --edition=2021`,
 * build every Go implementation with `go build` (default release optimization),
-* build every Cangjie implementation with `cjpm build`
-  (each benchmark's `cjpm.toml` sets `[profile.build] compile-option = "-O2"`),
+* build every Cangjie implementation with `cjc <name>.cj -O2`
+  (single-file compilation, no `cjpm` project required),
 * run each implementation with `<warmup>` warm-up + `<iterations>` measured
   runs (defaults: 1 + 5),
 * aggregate min/median/mean/stddev,
@@ -101,8 +101,7 @@ perf/
 ├── benchmarks/
 │   ├── micro/
 │   │   ├── fibonacci/
-│   │   │   ├── cjpm.toml            # name = "fibonacci"; -O2 in [profile.build]
-│   │   │   ├── src/main.cj
+│   │   │   ├── fibonacci.cj         # single-file Cangjie source (cjc -O2)
 │   │   │   ├── fibonacci.cpp
 │   │   │   ├── fibonacci.rs
 │   │   │   ├── fibonacci.go
@@ -153,8 +152,7 @@ cost in the presence of system noise).
 ## Adding a new benchmark
 
 1. Create `perf/benchmarks/<category>/<name>/` containing:
-   * `cjpm.toml` (set `name = "<name>"` and the `-O2` profile),
-   * `src/main.cj`,
+   * `<name>.cj` (single-file Cangjie source, compiled with `cjc -O2`),
    * `<name>.cpp`,
    * `<name>.rs`,
    * `<name>.go`,
