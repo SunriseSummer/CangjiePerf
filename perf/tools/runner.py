@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import platform
 import shutil
 import statistics
@@ -80,10 +79,12 @@ def prepare_command(language_id: str, language_cfg: dict[str, Any], benchmark: d
 
 def measure(command: list[str], size: int, repeat: int, warmup: int, timeout: float) -> dict[str, Any]:
     full_command = [*command, str(size)]
+    command_text = " ".join(full_command)
     for _ in range(warmup):
         completed = subprocess.run(full_command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout, check=False)
         if completed.returncode != 0:
-            raise RuntimeError(completed.stderr.strip() or completed.stdout.strip() or "warmup failed")
+            detail = completed.stderr.strip() or completed.stdout.strip() or "no process output"
+            raise RuntimeError(f"warmup failed for `{command_text}`: {detail}")
 
     samples: list[float] = []
     checksum = ""
@@ -92,7 +93,8 @@ def measure(command: list[str], size: int, repeat: int, warmup: int, timeout: fl
         completed = subprocess.run(full_command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout, check=False)
         elapsed = (time.perf_counter_ns() - started) / 1_000_000_000
         if completed.returncode != 0:
-            raise RuntimeError(completed.stderr.strip() or completed.stdout.strip() or "benchmark failed")
+            detail = completed.stderr.strip() or completed.stdout.strip() or "no process output"
+            raise RuntimeError(f"benchmark failed for `{command_text}`: {detail}")
         samples.append(elapsed)
         checksum = completed.stdout.strip().splitlines()[-1] if completed.stdout.strip() else ""
 
@@ -151,7 +153,7 @@ def render_report(payload: dict[str, Any]) -> str:
         if baseline is None and successful:
             baseline = min(successful, key=lambda row: row["measurement"]["median_sec"])
         baseline_time = baseline["measurement"]["median_sec"] if baseline else None
-        baseline_name = baseline["display"] if baseline else "n/a"
+        baseline_name = baseline["display"] if baseline else "no baseline"
 
         lines.extend([
             f"### {meta['name']} (`{benchmark_id}`)",
