@@ -70,20 +70,18 @@ def detect_rust() -> Toolchain:
 def detect_cangjie() -> Toolchain:
     """Detect the Cangjie toolchain.
 
-    We require both ``cjc`` (compiler) and ``cjpm`` (project manager) because
-    we drive Cangjie builds through ``cjpm build`` so that each benchmark's
-    ``cjpm.toml`` (with ``[profile.build] compile-option = "-O2"``) applies.
+    We only need ``cjc`` (compiler) because each benchmark is now a single
+    ``.cj`` source file compiled directly with ``cjc -O2``, matching the
+    flat ``<name>.cpp`` / ``<name>.go`` / ``<name>.rs`` layout used by the
+    other native toolchains in this suite.
     """
     cjc = shutil.which("cjc")
-    cjpm = shutil.which("cjpm")
-    if not cjc or not cjpm:
-        missing = ", ".join(n for n, p in (("cjc", cjc), ("cjpm", cjpm)) if not p)
+    if not cjc:
         return Toolchain(
             "cangjie", False, None,
-            f"not found: {missing} (install Cangjie SDK; see project .resource)",
+            "not found: cjc (install Cangjie SDK; see project .resource)",
         )
-    # Report the cjc version as the canonical version line.
-    return Toolchain("cangjie", True, cjpm, _run_version([cjc, "--version"]))
+    return Toolchain("cangjie", True, cjc, _run_version([cjc, "--version"]))
 
 
 def detect_all() -> dict[str, Toolchain]:

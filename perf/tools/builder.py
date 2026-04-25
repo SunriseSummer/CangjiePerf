@@ -3,14 +3,13 @@
 Each benchmark directory layout:
 
   <benchmark>/
-    cjpm.toml         # Cangjie package config (sets [profile.build] -O2)
-    src/main.cj       # Cangjie implementation
-    <name>.cpp        # C++ implementation     (built with `g++ -O2 -std=c++17`)
-    <name>.py         # Python implementation  (run directly with `python3`)
+    <name>.cj         # Cangjie implementation (built with ``cjc -O2``)
+    <name>.cpp        # C++ implementation     (built with ``g++ -O2 -std=c++17``)
+    <name>.rs         # Rust implementation    (built with ``rustc -O --edition=2021``)
+    <name>.go         # Go implementation      (built with ``go build``)
+    <name>.py         # Python implementation  (run directly with ``python3``)
 
-C++ build artifacts go to ``perf/build/cpp/<benchmark>/<benchmark>``.
-Cangjie binaries are produced by ``cjpm build`` into the benchmark's own
-``target/release/bin/main`` (cjpm's default release output path).
+All compiled language build artifacts go to ``perf/build/<language>/<benchmark>/<benchmark>``.
 """
 from __future__ import annotations
 
@@ -125,44 +124,25 @@ def build_rust(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
 
 
 def build_cangjie(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
-    """Build a Cangjie benchmark via ``cjpm build``.
+    """Build a Cangjie benchmark via ``cjc -O2`` on a single source file.
 
-    The benchmark's ``cjpm.toml`` configures ``[profile.build] compile-option =
-    "-O2"`` so this is equivalent to invoking ``cjc -O2`` but driven through
-    the canonical project-manager workflow, matching how a real Cangjie
-    project would be built and shipped.
+    Each benchmark has a single ``<name>.cj`` file; we invoke
+    ``cjc <name>.cj -O2 -o <out>`` directly, mirroring the flat
+    ``<name>.cpp`` / ``<name>.go`` / ``<name>.rs`` layout used by the other
+    native toolchains in this suite.
     """
     bench_dir = benchmark_dir(category, name)
-    toml = bench_dir / "cjpm.toml"
-    src_main = bench_dir / "src" / "main.cj"
-    if not toml.exists() or not src_main.exists() or not tc.available or not tc.binary:
+    src = bench_dir / f"{name}.cj"
+    if not src.exists() or not tc.available or not tc.binary:
         return None
-    cmd = [tc.binary, "build"]
-    res = subprocess.run(
-        cmd, cwd=bench_dir, capture_output=True, text=True, check=False
-    )
+    out_bin = build_dir("cangjie", name) / name
+    cmd = [tc.binary, str(src), "-O2", "-o", str(out_bin)]
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if res.returncode != 0:
         msg = (res.stdout or "") + (res.stderr or "")
         raise BuildError(f"Cangjie build failed for {name}:\n{msg}", log=msg)
-    # cjpm default release output: <project>/target/release/bin/main
-    out_bin = bench_dir / "target" / "release" / "bin" / "main"
-    if not out_bin.exists():
-        # Fallback search (older / future cjpm versions may differ).
-        candidates = list((bench_dir / "target").rglob("main"))
-        candidates = [c for c in candidates if c.is_file() and "release" in c.parts]
-        if not candidates:
-            raise BuildError(
-                f"Cangjie build for {name} succeeded but no executable was "
-                f"found under {bench_dir / 'target'}"
-            )
-        out_bin = candidates[0]
-    # Stage a copy under build/cangjie/<name>/<name> so the runner can locate
-    # it predictably (and so cjpm clean from inside the project doesn't break
-    # subsequent runs).
-    staged = build_dir("cangjie", name) / name
-    shutil.copy2(out_bin, staged)
-    staged.chmod(0o755)
-    return BuildArtifact("cangjie", name, [str(staged)], src_main,
+    out_bin.chmod(0o755)
+    return BuildArtifact("cangjie", name, [str(out_bin)], src,
                          build_log=(res.stdout + res.stderr).strip())
 
 
@@ -189,8 +169,7 @@ def build_one(language: str, category: str, name: str, tc: Toolchain) -> BuildAr
 
 
 def clean(language: str | None = None) -> None:
-    """Remove staged artifacts. For Cangjie, also clean each benchmark's
-    cjpm ``target/`` directory."""
+    """Remove staged build artifacts under ``perf/build/``."""
     root = _project_root() / "build"
     if root.exists():
         if language is None:
@@ -199,9 +178,6 @@ def clean(language: str | None = None) -> None:
             target = root / language
             if target.exists():
                 shutil.rmtree(target, ignore_errors=True)
-    if language in (None, "cangjie"):
-        for toml in (_project_root() / "benchmarks").rglob("cjpm.toml"):
-            shutil.rmtree(toml.parent / "target", ignore_errors=True)
 
 
 __all__ = [
