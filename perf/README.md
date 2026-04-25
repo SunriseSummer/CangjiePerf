@@ -8,7 +8,7 @@ implemented in five languages:
 | Cangjie  | `cjc` + `cjpm` | `cjpm build` with `-O2` (per `cjpm.toml`) |
 | C++      | `g++`          | `g++ -O2 -std=c++17`                |
 | Rust     | `rustc`        | `rustc -O --edition=2021` (release-equivalent `opt-level=3`) |
-| Go       | `go`           | `go build` (default release optimisation) |
+| Go       | `go`           | `go build` (default release optimization) |
 | Python   | CPython 3      | run directly with `python3`         |
 
 Cangjie / C++ / Rust / Go are the four **compiled** languages we compare
@@ -64,7 +64,7 @@ This will:
 * detect available toolchains and skip languages that are missing,
 * build every C++ implementation with `g++ -O2 -std=c++17`,
 * build every Rust implementation with `rustc -O --edition=2021`,
-* build every Go implementation with `go build` (default release optimisation),
+* build every Go implementation with `go build` (default release optimization),
 * build every Cangjie implementation with `cjpm build`
   (each benchmark's `cjpm.toml` sets `[profile.build] compile-option = "-O2"`),
 * run each implementation with `<warmup>` warm-up + `<iterations>` measured

@@ -17,7 +17,13 @@ func main() {
 	}
 	t0 := time.Now()
 	var sb strings.Builder
-	sb.Grow(int(n) * 12)
+	// Bounds-checked capacity hint: only call Grow when the requested size
+	// fits comfortably in `int`. For realistic benchmark sizes this branch
+	// is always taken; the check exists purely to make the int64→int
+	// conversion provably safe.
+	if n > 0 && n <= int64(^uint(0)>>1)/12 {
+		sb.Grow(int(n) * 12)
+	}
 	for i := int64(0); i < n; i++ {
 		sb.WriteString("frag")
 		sb.WriteString(strconv.FormatInt(i, 10))

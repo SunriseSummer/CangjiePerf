@@ -433,7 +433,7 @@ def render(report: dict[str, Any]) -> str:
     lines.append(
         "- Compiler flags: `g++ -O2 -std=c++17` for C++, `rustc -O "
         "--edition=2021` (release-equivalent ``opt-level=3``) for Rust, "
-        "`go build` (default release optimisation) for Go, `cjpm build` for "
+        "`go build` (default release optimization) for Go, `cjpm build` for "
         "Cangjie (each benchmark's `cjpm.toml` sets "
         "`[profile.build] compile-option = \"-O2\"`), CPython 3 for Python "
         "(no `-O`), all with no extra runtime tuning."

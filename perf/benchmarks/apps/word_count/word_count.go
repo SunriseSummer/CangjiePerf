@@ -12,7 +12,13 @@ import (
 func genText(n int64) string {
 	seed := int64(12345)
 	var sb strings.Builder
-	sb.Grow(int(n) * 7)
+	// Bounds-checked capacity hint: only call Grow when the requested size
+	// fits comfortably in `int`. For realistic benchmark sizes this branch
+	// is always taken; the check exists purely to make the int64→int
+	// conversion provably safe.
+	if n > 0 && n <= int64(^uint(0)>>1)/7 {
+		sb.Grow(int(n) * 7)
+	}
 	for i := int64(0); i < n; i++ {
 		seed = (seed*1103515245 + 12345) & 0x7FFFFFFF
 		idx := seed % 1024

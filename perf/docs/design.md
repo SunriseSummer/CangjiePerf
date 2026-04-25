@@ -59,7 +59,7 @@ process — see `samples_ms` in `results.json`.
 | Cangjie  | `cjpm`    | `cjpm build` (cwd = benchmark dir)                | `-O2` set in each benchmark's `cjpm.toml` under `[profile.build] compile-option` |
 | C++      | `g++`     | `g++ -O2 -std=c++17 -pipe <src>.cpp -o build/cpp/<name>/<name> -lm` | `-O2` |
 | Rust     | `rustc`   | `rustc -O --edition=2021 <src>.rs -o build/rust/<name>/<name>` | `-O` (release-equivalent `opt-level=3`) |
-| Go       | `go`      | `go build -o build/go/<name>/<name> <src>.go`     | default release optimisation (no `-N -l`) |
+| Go       | `go`      | `go build -o build/go/<name>/<name> <src>.go`     | default release optimization (no `-N -l`) |
 | Python   | `python3` | n/a (interpreted)                                 | none — bare CPython, no `-O` |
 
 ### Why `cjpm` (not `cjc` directly)?
