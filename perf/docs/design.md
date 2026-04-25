@@ -161,11 +161,14 @@ Suppose you want to add a benchmark called `regex_search` under `apps/`:
 | `enum_eval`      | algebraic data types, recursive `match` dispatch, tag-tag chains   |
 | `regex_search`   | the language's regex engine (NFA/DFA), backtracking, alternation   |
 | `math_loop`      | `sin`/`cos`/`sqrt`/`exp` performance and FP throughput              |
+| `prime_sieve`    | tight integer loop, byte-array indexing                            |
+| `quicksort`      | algorithm-level comparison (same Lomuto code in 3 langs)            |
 | `mandelbrot`     | tight nested numeric loop, FP arithmetic, branch prediction         |
 | `nbody`          | small-array data layout, FP multiply-add density, `sqrt` cost      |
 | `binary_trees`   | small-object allocation rate, GC throughput / heap allocator       |
 | `matrix_multiply`| memory layout, FP multiply-add throughput, cache behaviour          |
 | `word_count`     | string slicing/comparison, hashing, hash-map updates               |
+| `spectral_norm`  | numerical power-iteration kernel (CLBG, fully symmetric impl)       |
 
 This selection covers the most common day-to-day perf concerns when picking
 a language for either systems-style or scripting-style code, while staying

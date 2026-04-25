@@ -20,6 +20,8 @@ The suite covers two flavors of comparison:
    * `enum_eval` — algebraic data types & recursive pattern matching (AST eval).
    * `regex_search` — stdlib regex find-all over a non-trivial alternation pattern.
    * `math_loop` — `sin`/`cos`/`sqrt`/`exp` tight loop (math stdlib).
+   * `prime_sieve` — Sieve of Eratosthenes (algorithmically identical in all 3 languages).
+   * `quicksort` — hand-written Lomuto-partition quicksort (algorithmically identical in all 3 languages).
 2. **Application-style benchmarks** — small, realistic kernels in the spirit
    of the [Computer Language Benchmarks Game]:
    * `mandelbrot` — Mandelbrot escape-time bitmap.
@@ -27,6 +29,11 @@ The suite covers two flavors of comparison:
    * `binary_trees` — heap-allocation / GC-pressure stress test.
    * `matrix_multiply` — naive O(N³) double-precision matmul.
    * `word_count` — typical text-processing app (tokenize + hash-map count).
+   * `spectral_norm` — power-iteration spectral norm (CLBG numerical kernel).
+
+The generated `report.md` includes a per-benchmark **comparison table** _and_ a
+**log-scale grouped bar chart** (inline SVG) so cross-language differences are
+immediately visible at a glance.
 
 [Computer Language Benchmarks Game]: https://benchmarksgame-team.pages.debian.net/benchmarksgame/
 
@@ -95,13 +102,16 @@ perf/
 │   │   ├── closure_sum/             # higher-order map/filter/reduce
 │   │   ├── enum_eval/               # ADT + recursive pattern match (AST eval)
 │   │   ├── regex_search/            # stdlib regex find-all
-│   │   └── math_loop/               # sin/cos/sqrt/exp tight loop
+│   │   ├── math_loop/               # sin/cos/sqrt/exp tight loop
+│   │   ├── prime_sieve/             # Sieve of Eratosthenes
+│   │   └── quicksort/               # hand-written Lomuto quicksort
 │   └── apps/
 │       ├── mandelbrot/              # 600x600, 200 iters
 │       ├── nbody/                   # 5-body, 200 000 steps
 │       ├── binary_trees/            # depth 14 — alloc/GC pressure
 │       ├── matrix_multiply/         # 250×250 double matmul
-│       └── word_count/              # 1M words tokenize + count
+│       ├── word_count/              # 1M words tokenize + count
+│       └── spectral_norm/           # CLBG power iteration, N=1500
 ├── docs/
 │   └── design.md                    # detailed design / extension guide
 ├── results/                         # raw JSON + build logs (generated)

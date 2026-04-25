@@ -2,11 +2,17 @@
 from __future__ import annotations
 
 import datetime as _dt
+import math as _math
 from typing import Any
 
 
 _LANG_LABEL = {"cangjie": "Cangjie", "python": "Python", "cpp": "C++"}
 _LANG_ORDER = ["cangjie", "cpp", "python"]
+_LANG_COLOR = {
+    "cangjie": "#d9534f",  # red
+    "cpp":     "#5cb85c",  # green
+    "python":  "#5bc0de",  # blue
+}
 
 
 def _fmt_ms(v: float) -> str:
@@ -75,6 +81,160 @@ def _benchmark_table(bench: dict[str, Any]) -> str:
             + ", ".join(sorted(checksums))
         )
     return "\n".join(rows + ([""] + notes if notes else []))
+
+
+def _summary_chart(report: dict[str, Any]) -> str:
+    """Render a grouped log-scale bar chart of all benchmark timings as SVG.
+
+    GitHub markdown renders inline SVG, so the chart is embedded directly in
+    `report.md` and needs no images / external assets.
+    """
+    # Collect (benchmark_name, {lang: min_ms}) for benchmarks where at least
+    # one language has a successful result.
+    rows: list[tuple[str, dict[str, float]]] = []
+    for bench in report["benchmarks"]:
+        per_lang: dict[str, float] = {}
+        for lang in _LANG_ORDER:
+            r = bench["results"].get(lang)
+            if r and r.get("success") and r.get("summary"):
+                per_lang[lang] = r["summary"]["min_ms"]
+        if per_lang:
+            rows.append((bench["name"], per_lang))
+
+    if not rows:
+        return "_(no successful results — chart skipped)_"
+
+    # Layout constants.
+    n_groups = len(rows)
+    n_langs = len(_LANG_ORDER)
+    bar_w = 14
+    bar_gap = 2
+    group_w = n_langs * bar_w + (n_langs - 1) * bar_gap
+    group_gap = 18
+    plot_left = 60
+    plot_right = 20
+    plot_top = 50
+    plot_bottom = 70
+    plot_h = 240
+    plot_w = n_groups * group_w + (n_groups - 1) * group_gap
+    width = plot_left + plot_w + plot_right
+    height = plot_top + plot_h + plot_bottom
+
+    # Y axis: log10(ms). Anchor min/max to powers of ten so gridlines are nice.
+    all_ms = [v for _, per in rows for v in per.values()]
+    ymin_ms = max(min(all_ms), 0.001)
+    ymax_ms = max(all_ms)
+    log_min = _math.floor(_math.log10(ymin_ms))
+    log_max = _math.ceil(_math.log10(ymax_ms))
+    if log_max == log_min:
+        log_max = log_min + 1
+
+    def y_for(ms: float) -> float:
+        ms = max(ms, 10 ** log_min)
+        frac = (_math.log10(ms) - log_min) / (log_max - log_min)
+        return plot_top + plot_h - frac * plot_h
+
+    def label_for(power: int) -> str:
+        ms = 10 ** power
+        if ms >= 1000:
+            return f"{ms / 1000:g} s"
+        if ms >= 1:
+            return f"{ms:g} ms"
+        return f"{ms * 1000:g} µs"
+
+    parts: list[str] = []
+    parts.append(
+        f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'viewBox="0 0 {width} {height}" '
+        f'width="100%" role="img" aria-label="Benchmark timings (log scale)" '
+        f'font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif" '
+        f'font-size="11">'
+    )
+    parts.append(
+        f'<rect x="0" y="0" width="{width}" height="{height}" '
+        f'fill="#ffffff"/>'
+    )
+    # Title
+    parts.append(
+        f'<text x="{width/2:.1f}" y="22" text-anchor="middle" '
+        f'font-size="14" font-weight="600" fill="#222">'
+        f'Benchmark wall-clock time per implementation '
+        f'(min of {report["config"]["iterations"]} runs, log scale, lower is better)'
+        f'</text>'
+    )
+    # Legend
+    legend_x = plot_left
+    legend_y = 36
+    for i, lang in enumerate(_LANG_ORDER):
+        x = legend_x + i * 110
+        parts.append(
+            f'<rect x="{x}" y="{legend_y - 9}" width="12" height="12" '
+            f'fill="{_LANG_COLOR[lang]}" rx="2"/>'
+        )
+        parts.append(
+            f'<text x="{x + 18}" y="{legend_y + 1}" fill="#333">'
+            f'{_LANG_LABEL[lang]}</text>'
+        )
+
+    # Y gridlines & labels.
+    for power in range(int(log_min), int(log_max) + 1):
+        y = y_for(10 ** power)
+        parts.append(
+            f'<line x1="{plot_left}" y1="{y:.1f}" '
+            f'x2="{plot_left + plot_w}" y2="{y:.1f}" '
+            f'stroke="#e5e5e5" stroke-width="1"/>'
+        )
+        parts.append(
+            f'<text x="{plot_left - 6}" y="{y + 3:.1f}" '
+            f'text-anchor="end" fill="#555">{label_for(power)}</text>'
+        )
+    # Axis lines.
+    parts.append(
+        f'<line x1="{plot_left}" y1="{plot_top}" '
+        f'x2="{plot_left}" y2="{plot_top + plot_h}" '
+        f'stroke="#888" stroke-width="1"/>'
+    )
+    parts.append(
+        f'<line x1="{plot_left}" y1="{plot_top + plot_h}" '
+        f'x2="{plot_left + plot_w}" y2="{plot_top + plot_h}" '
+        f'stroke="#888" stroke-width="1"/>'
+    )
+
+    # Bars.
+    for gi, (name, per_lang) in enumerate(rows):
+        gx = plot_left + gi * (group_w + group_gap)
+        baseline = plot_top + plot_h
+        for li, lang in enumerate(_LANG_ORDER):
+            bx = gx + li * (bar_w + bar_gap)
+            if lang in per_lang:
+                ms = per_lang[lang]
+                top = y_for(ms)
+                h = max(baseline - top, 1.0)
+                parts.append(
+                    f'<rect x="{bx:.1f}" y="{top:.1f}" '
+                    f'width="{bar_w}" height="{h:.1f}" '
+                    f'fill="{_LANG_COLOR[lang]}" rx="1">'
+                    f'<title>{_LANG_LABEL[lang]} {name}: {_fmt_ms(ms)}</title>'
+                    f'</rect>'
+                )
+            else:
+                # Hatched placeholder for unavailable / failed languages.
+                parts.append(
+                    f'<rect x="{bx:.1f}" y="{baseline - 3}" '
+                    f'width="{bar_w}" height="3" fill="#cccccc" rx="1">'
+                    f'<title>{_LANG_LABEL[lang]} {name}: missing</title>'
+                    f'</rect>'
+                )
+        # Group label (rotated).
+        cx = gx + group_w / 2
+        ly = plot_top + plot_h + 8
+        parts.append(
+            f'<text x="{cx:.1f}" y="{ly:.1f}" text-anchor="end" fill="#333" '
+            f'transform="rotate(-45 {cx:.1f},{ly:.1f})">{name}</text>'
+        )
+
+    parts.append("</svg>")
+    return "".join(parts)
 
 
 def _summary_table(report: dict[str, Any]) -> str:
@@ -149,6 +309,17 @@ def render(report: dict[str, Any]) -> str:
     lines.append("## Summary")
     lines.append("")
     lines.append(_summary_table(report))
+    lines.append("")
+    lines.append("### Visual comparison")
+    lines.append("")
+    lines.append(
+        "Each benchmark shows three side-by-side bars (Cangjie / C++ / Python). "
+        "**Lower bars are faster.** Note the **logarithmic** y-axis: a one-step "
+        "gridline difference is a 10× speed difference. Hover any bar to see "
+        "its exact timing."
+    )
+    lines.append("")
+    lines.append(_summary_chart(report))
     lines.append("")
     lines.append("## Per-benchmark Detail")
     lines.append("")

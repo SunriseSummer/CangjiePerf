@@ -75,6 +75,20 @@
       "args": ["5000000"]
     },
     {
+      "name": "prime_sieve",
+      "category": "micro",
+      "title": "Sieve of Eratosthenes",
+      "description": "Classic Sieve of Eratosthenes up to N on a one-byte-per-cell boolean array, then count primes and sum them mod 2^31. Algorithmically identical across all three languages: same loop bounds, same inner stride, same checksum formula.",
+      "args": ["20000000"]
+    },
+    {
+      "name": "quicksort",
+      "category": "micro",
+      "title": "Hand-written quicksort",
+      "description": "Lomuto-partition quicksort with middle-element pivot and recurse-smaller-side / iterate-larger-side, implemented by hand in all three languages so the algorithm itself is identical (complements the stdlib `sort` benchmark).",
+      "args": ["1500000"]
+    },
+    {
       "name": "mandelbrot",
       "category": "apps",
       "title": "Mandelbrot set (numerical kernel)",
@@ -108,6 +122,13 @@
       "title": "Word count (text processing)",
       "description": "Tokenize a synthesized N-word text and count word frequencies in a hash-map. Stresses string slicing/comparison, hashing, and hash-map updates — a typical scripting workload.",
       "args": ["1000000"]
+    },
+    {
+      "name": "spectral_norm",
+      "category": "apps",
+      "title": "Spectral norm (CLBG numerical kernel)",
+      "description": "Approximates the largest eigenvalue of an infinite matrix A[i][j] = 1 / ((i+j)(i+j+1)/2 + i + 1) via 10 power iterations of v <- A^T A v. Adapted from the Computer Language Benchmarks Game; algorithmically identical across all three languages.",
+      "args": ["1500"]
     }
   ]
 }
