@@ -1,0 +1,64 @@
+{
+  "_comment": [
+    "Benchmark catalog for CangjiePerf.",
+    "Each benchmark is implemented in three languages (Cangjie/Python/C++).",
+    "Each implementation prints exactly two trailing lines to stdout:",
+    "  CHECKSUM:<string>",
+    "  ELAPSED_MS:<float>",
+    "The runner verifies CHECKSUM is identical across implementations of the",
+    "same benchmark, and uses ELAPSED_MS as the measurement.",
+    "",
+    "Sizes are chosen so the full suite finishes in roughly one minute on a",
+    "modern laptop. Override per-benchmark via 'sizes' in this file or via",
+    "--size on the command line."
+  ],
+  "defaults": {
+    "warmup": 1,
+    "iterations": 5,
+    "languages": ["cangjie", "python", "cpp"]
+  },
+  "benchmarks": [
+    {
+      "name": "fibonacci",
+      "category": "micro",
+      "title": "Recursive Fibonacci (function call / recursion)",
+      "description": "Pure recursive fib(N). Stresses function-call overhead and integer arithmetic. No standard-library involvement beyond integers.",
+      "args": ["32"]
+    },
+    {
+      "name": "sort",
+      "category": "micro",
+      "title": "Sort 2M integers (stdlib sort)",
+      "description": "Generate 2,000,000 deterministic pseudo-random Int64 values then sort ascending using the language's standard sort. Stresses standard library sorting and dynamic arrays.",
+      "args": ["2000000"]
+    },
+    {
+      "name": "hashmap_ops",
+      "category": "micro",
+      "title": "HashMap insert + lookup (stdlib hash table)",
+      "description": "Insert N (string,int) pairs then look up the same N keys. Stresses hash maps, string hashing, and string allocation.",
+      "args": ["500000"]
+    },
+    {
+      "name": "string_concat",
+      "category": "micro",
+      "title": "String building (stdlib StringBuilder)",
+      "description": "Build a single large string from N small fragments using the recommended efficient builder for each language. Stresses string buffers and memory growth.",
+      "args": ["500000"]
+    },
+    {
+      "name": "mandelbrot",
+      "category": "apps",
+      "title": "Mandelbrot set (numerical kernel)",
+      "description": "Compute a Mandelbrot escape-time bitmap of size W*W with up to MAX_ITER iterations. Inspired by the Computer Language Benchmarks Game. Stresses tight numeric loops and floating-point arithmetic.",
+      "args": ["600", "200"]
+    },
+    {
+      "name": "nbody",
+      "category": "apps",
+      "title": "N-Body simulation (numerical kernel)",
+      "description": "Symplectic integrator for the classic 5-body solar system from the Benchmarks Game over N steps. Stresses tight floating-point loops and array indexing.",
+      "args": ["200000"]
+    }
+  ]
+}
