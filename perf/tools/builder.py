@@ -26,6 +26,11 @@ CPP_FLAGS = ["-O2", "-std=c++17", "-pipe"]
 # C++ requires the math library on Linux for some builds.
 CPP_LINK_FLAGS = ["-lm"]
 
+# Rust optimization flags. ``-O`` is the rustc shorthand for ``opt-level=3``,
+# matching ``-O2`` semantics for our purposes (full optimizer pipeline,
+# release-quality code).
+RUST_FLAGS = ["-O", "--edition=2021"]
+
 
 @dataclass
 class BuildArtifact:
@@ -81,6 +86,47 @@ def build_cpp(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
                          build_log=(res.stdout + res.stderr).strip())
 
 
+def build_go(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
+    """Build a Go benchmark via ``go build`` with default release settings.
+
+    Each benchmark has a single ``<name>.go`` file declaring ``package main``;
+    we invoke ``go build -o <out> <src>``. The Go toolchain optimizes by
+    default (no ``-N -l`` flags), matching the spirit of ``-O2`` for C++.
+    """
+    src = _src(category, name, "go")
+    if not src or not tc.available or not tc.binary:
+        return None
+    out_bin = build_dir("go", name) / name
+    cmd = [tc.binary, "build", "-o", str(out_bin), str(src)]
+    # ``go build`` requires a writable cache. Default is fine; just isolate it
+    # so concurrent runs don't fight, and so it lives next to our build tree.
+    env = None
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False, env=env)
+    if res.returncode != 0:
+        msg = (res.stdout or "") + (res.stderr or "")
+        raise BuildError(f"Go build failed for {name}:\n{msg}", log=msg)
+    return BuildArtifact("go", name, [str(out_bin)], src,
+                         build_log=(res.stdout + res.stderr).strip())
+
+
+def build_rust(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
+    """Build a Rust benchmark by invoking ``rustc -O`` directly on a single
+    source file. This mirrors the flat ``<name>.cpp`` / ``<name>.go`` layout
+    used by the other native toolchains in this suite.
+    """
+    src = _src(category, name, "rs")
+    if not src or not tc.available or not tc.binary:
+        return None
+    out_bin = build_dir("rust", name) / name
+    cmd = [tc.binary, *RUST_FLAGS, str(src), "-o", str(out_bin)]
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if res.returncode != 0:
+        msg = (res.stdout or "") + (res.stderr or "")
+        raise BuildError(f"Rust build failed for {name}:\n{msg}", log=msg)
+    return BuildArtifact("rust", name, [str(out_bin)], src,
+                         build_log=(res.stdout + res.stderr).strip())
+
+
 def build_cangjie(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
     """Build a Cangjie benchmark via ``cjpm build``.
 
@@ -133,6 +179,8 @@ _BUILDERS = {
     "python": build_python,
     "cpp": build_cpp,
     "cangjie": build_cangjie,
+    "go": build_go,
+    "rust": build_rust,
 }
 
 

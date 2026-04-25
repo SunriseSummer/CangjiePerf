@@ -1,13 +1,18 @@
 # CangjiePerf
 
 A side-by-side **performance benchmark suite** comparing the same workload
-implemented in three languages:
+implemented in five languages:
 
 | Language | Toolchain      | Build mode                          |
 |----------|----------------|-------------------------------------|
 | Cangjie  | `cjc` + `cjpm` | `cjpm build` with `-O2` (per `cjpm.toml`) |
 | C++      | `g++`          | `g++ -O2 -std=c++17`                |
+| Rust     | `rustc`        | `rustc -O --edition=2021` (release-equivalent `opt-level=3`) |
+| Go       | `go`           | `go build` (default release optimisation) |
 | Python   | CPython 3      | run directly with `python3`         |
+
+Cangjie / C++ / Rust / Go are the four **compiled** languages we compare
+head-to-head. Python is included as a scripting-language baseline.
 
 The suite covers two flavors of comparison:
 
@@ -45,6 +50,8 @@ immediately visible at a glance.
 # 1. Make sure prerequisites are on PATH:
 #      python3   (always required to run the driver)
 #      g++       (for C++ benchmarks)
+#      rustc     (for Rust benchmarks)
+#      go        (for Go benchmarks)
 #      cjc cjpm  (for Cangjie benchmarks; install from the SDK referenced
 #                 in the project's top-level .resource file)
 
@@ -56,6 +63,8 @@ This will:
 
 * detect available toolchains and skip languages that are missing,
 * build every C++ implementation with `g++ -O2 -std=c++17`,
+* build every Rust implementation with `rustc -O --edition=2021`,
+* build every Go implementation with `go build` (default release optimisation),
 * build every Cangjie implementation with `cjpm build`
   (each benchmark's `cjpm.toml` sets `[profile.build] compile-option = "-O2"`),
 * run each implementation with `<warmup>` warm-up + `<iterations>` measured
@@ -68,7 +77,7 @@ This will:
 
 ```bash
 python3 perf/run.py --filter sort,nbody         # only some benchmarks
-python3 perf/run.py --languages python,cpp      # only some languages
+python3 perf/run.py --languages python,cpp      # only some languages (cangjie,cpp,rust,go,python)
 python3 perf/run.py --iterations 10 --warmup 2  # more measurement cycles
 python3 perf/run.py --clean                     # wipe build cache first
 python3 perf/run.py --no-build                  # rerun without rebuilding
@@ -95,6 +104,8 @@ perf/
 │   │   │   ├── cjpm.toml            # name = "fibonacci"; -O2 in [profile.build]
 │   │   │   ├── src/main.cj
 │   │   │   ├── fibonacci.cpp
+│   │   │   ├── fibonacci.rs
+│   │   │   ├── fibonacci.go
 │   │   │   └── fibonacci.py
 │   │   ├── sort/                    # 2M Int64 stdlib-sort
 │   │   ├── hashmap_ops/             # 500k string→int insert + lookup
@@ -127,7 +138,7 @@ times its own hot path with a monotonic clock and prints the result on the
 last two lines of stdout:
 
 ```
-CHECKSUM:<value>      # used to verify all 3 implementations agree
+CHECKSUM:<value>      # used to verify all 5 implementations agree
 ELAPSED_MS:<float>    # wall-clock milliseconds, measured inside the process
 ```
 
@@ -145,9 +156,13 @@ cost in the presence of system noise).
    * `cjpm.toml` (set `name = "<name>"` and the `-O2` profile),
    * `src/main.cj`,
    * `<name>.cpp`,
+   * `<name>.rs`,
+   * `<name>.go`,
    * `<name>.py`.
 2. Each implementation must take problem-size CLI arguments and print the two
-   trailing `CHECKSUM:` / `ELAPSED_MS:` lines.
+   trailing `CHECKSUM:` / `ELAPSED_MS:` lines, **and** all five
+   implementations of the same benchmark must produce identical `CHECKSUM`
+   values (the runner verifies this and aborts the comparison otherwise).
 3. Add an entry in `perf/config/benchmarks.json` describing it (name,
    category, title, description, default args).
 

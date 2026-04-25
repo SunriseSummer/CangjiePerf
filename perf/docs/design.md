@@ -8,7 +8,7 @@ see [`../README.md`](../README.md).
 
 ## 1. Goals
 
-* **Apples-to-apples** comparison of Cangjie, Python, and C++ on the same
+* **Apples-to-apples** comparison of Cangjie, C++, Rust, Go, and Python on the same
   workload.
 * Cover both **language-level features** (recursion, function calls, integer
   arithmetic) and **standard-library** primitives (sort, hash-map,
@@ -41,6 +41,7 @@ ELAPSED_MS:<float>
 * `ELAPSED_MS` is the wall-clock time, in milliseconds, of the benchmark's
   hot path **measured inside the process** with a monotonic clock
   (`time.perf_counter_ns` in Python, `std::chrono::steady_clock` in C++,
+  `std::time::Instant` in Rust, `time.Now()` in Go,
   `MonoTime.now()` in Cangjie). Process startup, argument parsing, JIT/JVM
   warm-up costs etc. are deliberately excluded.
 
@@ -57,6 +58,8 @@ process — see `samples_ms` in `results.json`.
 |----------|-----------|---------------------------------------------------|--------------|
 | Cangjie  | `cjpm`    | `cjpm build` (cwd = benchmark dir)                | `-O2` set in each benchmark's `cjpm.toml` under `[profile.build] compile-option` |
 | C++      | `g++`     | `g++ -O2 -std=c++17 -pipe <src>.cpp -o build/cpp/<name>/<name> -lm` | `-O2` |
+| Rust     | `rustc`   | `rustc -O --edition=2021 <src>.rs -o build/rust/<name>/<name>` | `-O` (release-equivalent `opt-level=3`) |
+| Go       | `go`      | `go build -o build/go/<name>/<name> <src>.go`     | default release optimisation (no `-N -l`) |
 | Python   | `python3` | n/a (interpreted)                                 | none — bare CPython, no `-O` |
 
 ### Why `cjpm` (not `cjc` directly)?
@@ -127,12 +130,14 @@ python3 perf/run.py --filter sort   # uses default 2_000_000
 
 Suppose you want to add a benchmark called `regex_search` under `apps/`:
 
-1. **Create the directory and the three implementations**:
+1. **Create the directory and all five implementations**:
    ```
    perf/benchmarks/apps/regex_search/
      cjpm.toml
      src/main.cj
      regex_search.cpp
+     regex_search.rs
+     regex_search.go
      regex_search.py
    ```
 2. **Write `cjpm.toml`** following the same template as existing benchmarks
@@ -184,7 +189,7 @@ small enough to read end-to-end in one sitting.
   timing reported in stderr / `results.json`.
 * Each benchmark uses its language's *idiomatic* recommended primitive
   (e.g. `dict` in Python, `std::unordered_map` in C++, `HashMap` in
-  Cangjie). It's not an attempt to find the absolute fastest data
+  Rust, `map` in Go, `HashMap` in Cangjie). It's not an attempt to find the absolute fastest data
   structure in each ecosystem.
 * Compiler version, CPU governor settings, and concurrent system load all
   affect results. The `report.md` always records the host environment so
