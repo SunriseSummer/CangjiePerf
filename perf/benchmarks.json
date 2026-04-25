@@ -1,0 +1,52 @@
+{
+  "benchmarks": [
+    {
+      "id": "arith_loop",
+      "name": "Arithmetic loop",
+      "category": "language-feature",
+      "description": "Integer arithmetic, loop control, and deterministic checksum accumulation.",
+      "size": 2000000,
+      "quick_size": 200000
+    },
+    {
+      "id": "containers",
+      "name": "Sequential and hash containers",
+      "category": "standard-library",
+      "description": "Append/traverse dynamic arrays and insert/query hash maps.",
+      "size": 300000,
+      "quick_size": 30000
+    },
+    {
+      "id": "word_count",
+      "name": "Synthetic word count",
+      "category": "scenario",
+      "description": "Benchmark-game-style workload combining text generation and hash aggregation.",
+      "size": 500000,
+      "quick_size": 50000
+    }
+  ],
+  "languages": {
+    "python": {
+      "display": "Python",
+      "source_dir": "cases/python",
+      "extension": ".py",
+      "runner": "python3"
+    },
+    "cpp": {
+      "display": "C++",
+      "source_dir": "cases/cpp",
+      "extension": ".cpp",
+      "compiler": "g++",
+      "compile_args": ["-O3", "-std=c++17", "-march=native", "-DNDEBUG"],
+      "binary_dir": "build/cpp"
+    },
+    "cangjie": {
+      "display": "Cangjie",
+      "source_dir": "cases/cangjie",
+      "extension": ".cj",
+      "compiler": "cjc",
+      "compile_args": ["-O2"],
+      "binary_dir": "build/cangjie"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+/build/*
+/results/*
+/report.md
+!/build/.gitkeep
+!/results/.gitkeep
