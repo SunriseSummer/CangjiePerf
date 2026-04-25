@@ -98,10 +98,7 @@ def build_go(category: str, name: str, tc: Toolchain) -> BuildArtifact | None:
         return None
     out_bin = build_dir("go", name) / name
     cmd = [tc.binary, "build", "-o", str(out_bin), str(src)]
-    # ``go build`` requires a writable cache. Default is fine; just isolate it
-    # so concurrent runs don't fight, and so it lives next to our build tree.
-    env = None
-    res = subprocess.run(cmd, capture_output=True, text=True, check=False, env=env)
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if res.returncode != 0:
         msg = (res.stdout or "") + (res.stderr or "")
         raise BuildError(f"Go build failed for {name}:\n{msg}", log=msg)

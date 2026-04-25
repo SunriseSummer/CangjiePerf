@@ -1,6 +1,6 @@
 # CangjiePerf Benchmark Report
 
-_Generated: 2026-04-25T15:19:41+00:00_
+_Generated: 2026-04-25T15:28:31+00:00_
 
 ## Environment
 
@@ -32,22 +32,22 @@ The benchmark suite compares **Cangjie** against four reference languages: **C++
 
 | Benchmark | Category | Cangjie | C++ | Rust | Go | Python | Fastest |
 |---|---|---|---|---|---|---|---|
-| **fibonacci** | micro | 23.90 ms | 3.87 ms | 6.73 ms | 11.54 ms | 308.03 ms | C++ |
-| **sort** ⚠️ | **micro** | **2.134 s** | **133.46 ms** | **55.73 ms** | **297.99 ms** | **773.20 ms** | **Rust** |
-| **hashmap_ops** ⚠️ | **micro** | **492.19 ms** | **105.51 ms** | **134.26 ms** | **65.98 ms** | **122.58 ms** | **Go** |
-| **string_concat** | micro | 47.25 ms | 32.70 ms | 12.58 ms | 16.08 ms | 70.87 ms | Rust |
-| **closure_sum** ⚠️ | **micro** | **100.85 ms** | **9.18 ms** | **1.55 ms** | **2.90 ms** | **359.24 ms** | **Rust** |
-| **enum_eval** | micro | 583.14 ms | 133.25 ms | 226.28 ms | 188.05 ms | 5.215 s | C++ |
-| **regex_search** ⚠️ | **micro** | **45.60 ms** | **77.83 ms** | **2.01 ms** | **103.34 ms** | **41.63 ms** | **Rust** |
-| **math_loop** | micro | 140.38 ms | 86.27 ms | 84.96 ms | 144.94 ms | 916.98 ms | Rust |
-| **prime_sieve** ⚠️ | **micro** | **1.561 s** | **53.53 ms** | **61.27 ms** | **53.37 ms** | **2.828 s** | **Go** |
-| **quicksort** ⚠️ | **micro** | **2.289 s** | **111.48 ms** | **115.80 ms** | **120.65 ms** | **3.808 s** | **C++** |
-| **mandelbrot** | apps | 251.84 ms | 90.78 ms | 91.43 ms | 91.16 ms | 3.465 s | C++ |
-| **nbody** | apps | 78.81 ms | 14.36 ms | 9.17 ms | 15.04 ms | 1.161 s | Rust |
-| **binary_trees** | apps | 116.15 ms | 66.65 ms | 64.97 ms | 93.32 ms | 855.13 ms | Rust |
-| **matrix_multiply** ⚠️ | **apps** | **874.82 ms** | **10.19 ms** | **3.70 ms** | **10.42 ms** | **722.18 ms** | **Rust** |
-| **word_count** ⚠️ | **apps** | **727.98 ms** | **27.02 ms** | **25.98 ms** | **25.16 ms** | **135.81 ms** | **Go** |
-| **spectral_norm** ⚠️ | **apps** | **2.223 s** | **128.74 ms** | **129.39 ms** | **129.51 ms** | **15.449 s** | **C++** |
+| **fibonacci** | micro | 23.92 ms | 3.92 ms | 6.68 ms | 12.06 ms | 308.72 ms | C++ |
+| **sort** ⚠️ | **micro** | **2.171 s** | **133.64 ms** | **56.08 ms** | **298.34 ms** | **794.80 ms** | **Rust** |
+| **hashmap_ops** | micro | 503.66 ms | 134.13 ms | 132.19 ms | 60.50 ms | 119.16 ms | Go |
+| **string_concat** | micro | 47.26 ms | 32.46 ms | 12.54 ms | 16.12 ms | 71.38 ms | Rust |
+| **closure_sum** ⚠️ | **micro** | **102.07 ms** | **9.67 ms** | **1.55 ms** | **2.89 ms** | **357.86 ms** | **Rust** |
+| **enum_eval** | micro | 516.12 ms | 129.12 ms | 193.13 ms | 174.10 ms | 5.245 s | C++ |
+| **regex_search** ⚠️ | **micro** | **45.57 ms** | **77.69 ms** | **1.99 ms** | **100.83 ms** | **42.00 ms** | **Rust** |
+| **math_loop** | micro | 140.76 ms | 86.05 ms | 84.40 ms | 144.27 ms | 916.04 ms | Rust |
+| **prime_sieve** ⚠️ | **micro** | **1.609 s** | **55.81 ms** | **67.68 ms** | **59.64 ms** | **2.829 s** | **C++** |
+| **quicksort** ⚠️ | **micro** | **2.265 s** | **111.62 ms** | **116.12 ms** | **120.96 ms** | **3.607 s** | **C++** |
+| **mandelbrot** | apps | 251.74 ms | 90.86 ms | 91.70 ms | 91.22 ms | 3.455 s | C++ |
+| **nbody** | apps | 78.90 ms | 13.84 ms | 9.19 ms | 14.99 ms | 1.162 s | Rust |
+| **binary_trees** | apps | 115.89 ms | 67.13 ms | 65.73 ms | 92.91 ms | 847.46 ms | Rust |
+| **matrix_multiply** ⚠️ | **apps** | **884.58 ms** | **10.35 ms** | **3.76 ms** | **10.43 ms** | **725.68 ms** | **Rust** |
+| **word_count** ⚠️ | **apps** | **723.62 ms** | **27.23 ms** | **25.99 ms** | **25.11 ms** | **134.97 ms** | **Go** |
+| **spectral_norm** ⚠️ | **apps** | **2.230 s** | **128.76 ms** | **129.41 ms** | **129.59 ms** | **15.475 s** | **C++** |
 
 > **Bold rows** marked with ⚠️ are benchmarks where Cangjie's timing is closer (in log scale) to Python's than to C++'s — i.e. cases where the Cangjie implementation is significantly under-performing the native baseline. See [`analyse.md`](./analyse.md) for the root-cause analysis.
 
@@ -67,11 +67,11 @@ Pure recursive fib(N). Stresses function-call overhead and integer arithmetic. N
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 23.90 ms | 23.94 ms | 23.95 ms | 44.68 µs | 6.18× | `2178309` |
-| C++ | ✅ | 3.87 ms | 3.93 ms | 4.05 ms | 229.46 µs | 1.00× | `2178309` |
-| Rust | ✅ | 6.73 ms | 6.75 ms | 6.96 ms | 298.73 µs | 1.74× | `2178309` |
-| Go | ✅ | 11.54 ms | 12.19 ms | 12.05 ms | 286.91 µs | 2.99× | `2178309` |
-| Python | ✅ | 308.03 ms | 310.40 ms | 312.21 ms | 4.49 ms | 79.69× | `2178309` |
+| Cangjie | ✅ | 23.92 ms | 23.97 ms | 23.95 ms | 26.12 µs | 6.10× | `2178309` |
+| C++ | ✅ | 3.92 ms | 3.97 ms | 4.05 ms | 213.49 µs | 1.00× | `2178309` |
+| Rust | ✅ | 6.68 ms | 6.75 ms | 6.83 ms | 227.36 µs | 1.70× | `2178309` |
+| Go | ✅ | 12.06 ms | 12.11 ms | 12.35 ms | 490.74 µs | 3.08× | `2178309` |
+| Python | ✅ | 308.72 ms | 312.64 ms | 312.88 ms | 2.74 ms | 78.78× | `2178309` |
 
 ### sort — Sort 2M integers (stdlib sort)
 
@@ -81,11 +81,11 @@ Generate 2,000,000 deterministic pseudo-random Int64 values then sort ascending 
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 2.134 s | 2.178 s | 2.172 s | 24.07 ms | 38.29× | `1074570229` |
-| C++ | ✅ | 133.46 ms | 133.58 ms | 133.75 ms | 478.45 µs | 2.39× | `1074570229` |
-| Rust | ✅ | 55.73 ms | 55.82 ms | 55.92 ms | 201.44 µs | 1.00× | `1074570229` |
-| Go | ✅ | 297.99 ms | 298.13 ms | 298.16 ms | 189.18 µs | 5.35× | `1074570229` |
-| Python | ✅ | 773.20 ms | 790.76 ms | 796.54 ms | 18.13 ms | 13.87× | `1074570229` |
+| Cangjie | ✅ | 2.171 s | 2.200 s | 2.195 s | 15.26 ms | 38.71× | `1074570229` |
+| C++ | ✅ | 133.64 ms | 134.00 ms | 133.99 ms | 222.66 µs | 2.38× | `1074570229` |
+| Rust | ✅ | 56.08 ms | 56.32 ms | 56.28 ms | 137.27 µs | 1.00× | `1074570229` |
+| Go | ✅ | 298.34 ms | 298.75 ms | 298.73 ms | 244.95 µs | 5.32× | `1074570229` |
+| Python | ✅ | 794.80 ms | 836.33 ms | 837.15 ms | 28.13 ms | 14.17× | `1074570229` |
 
 ### hashmap_ops — HashMap insert + lookup (stdlib hash table)
 
@@ -95,11 +95,11 @@ Insert N (string,int) pairs then look up the same N keys. Stresses hash maps, st
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 492.19 ms | 510.90 ms | 507.99 ms | 9.43 ms | 7.46× | `0` |
-| C++ | ✅ | 105.51 ms | 115.89 ms | 113.84 ms | 6.66 ms | 1.60× | `0` |
-| Rust | ✅ | 134.26 ms | 141.25 ms | 140.55 ms | 3.93 ms | 2.03× | `0` |
-| Go | ✅ | 65.98 ms | 73.94 ms | 73.93 ms | 5.99 ms | 1.00× | `0` |
-| Python | ✅ | 122.58 ms | 125.08 ms | 126.96 ms | 4.94 ms | 1.86× | `0` |
+| Cangjie | ✅ | 503.66 ms | 516.03 ms | 513.75 ms | 9.58 ms | 8.33× | `0` |
+| C++ | ✅ | 134.13 ms | 135.80 ms | 136.29 ms | 2.17 ms | 2.22× | `0` |
+| Rust | ✅ | 132.19 ms | 136.66 ms | 141.79 ms | 10.62 ms | 2.19× | `0` |
+| Go | ✅ | 60.50 ms | 61.69 ms | 65.61 ms | 6.87 ms | 1.00× | `0` |
+| Python | ✅ | 119.16 ms | 119.93 ms | 120.42 ms | 1.31 ms | 1.97× | `0` |
 
 ### string_concat — String building (stdlib StringBuilder)
 
@@ -109,11 +109,11 @@ Build a single large string from N small fragments using the recommended efficie
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 47.25 ms | 47.35 ms | 47.36 ms | 106.73 µs | 3.76× | `5388890` |
-| C++ | ✅ | 32.70 ms | 33.12 ms | 33.08 ms | 222.24 µs | 2.60× | `5388890` |
-| Rust | ✅ | 12.58 ms | 12.60 ms | 12.60 ms | 22.28 µs | 1.00× | `5388890` |
-| Go | ✅ | 16.08 ms | 16.17 ms | 16.29 ms | 231.37 µs | 1.28× | `5388890` |
-| Python | ✅ | 70.87 ms | 71.05 ms | 71.46 ms | 943.09 µs | 5.63× | `5388890` |
+| Cangjie | ✅ | 47.26 ms | 47.34 ms | 47.48 ms | 275.07 µs | 3.77× | `5388890` |
+| C++ | ✅ | 32.46 ms | 33.20 ms | 33.08 ms | 414.84 µs | 2.59× | `5388890` |
+| Rust | ✅ | 12.54 ms | 12.66 ms | 12.64 ms | 57.86 µs | 1.00× | `5388890` |
+| Go | ✅ | 16.12 ms | 16.57 ms | 16.51 ms | 264.79 µs | 1.29× | `5388890` |
+| Python | ✅ | 71.38 ms | 72.65 ms | 72.42 ms | 735.21 µs | 5.69× | `5388890` |
 
 ### closure_sum — Closure / higher-order pipeline
 
@@ -123,11 +123,11 @@ Apply a map -> filter -> reduce pipeline of closures over N integers. Stresses h
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 100.85 ms | 102.13 ms | 101.75 ms | 731.80 µs | 65.26× | `1777776444435777780` |
-| C++ | ✅ | 9.18 ms | 9.56 ms | 9.45 ms | 215.48 µs | 5.94× | `1777776444435777780` |
-| Rust | ✅ | 1.55 ms | 1.57 ms | 1.63 ms | 114.44 µs | 1.00× | `1777776444435777780` |
-| Go | ✅ | 2.90 ms | 2.96 ms | 3.02 ms | 146.53 µs | 1.87× | `1777776444435777780` |
-| Python | ✅ | 359.24 ms | 361.46 ms | 364.88 ms | 9.19 ms | 232.47× | `1777776444435777780` |
+| Cangjie | ✅ | 102.07 ms | 102.56 ms | 102.52 ms | 279.93 µs | 65.78× | `1777776444435777780` |
+| C++ | ✅ | 9.67 ms | 9.69 ms | 9.70 ms | 26.77 µs | 6.23× | `1777776444435777780` |
+| Rust | ✅ | 1.55 ms | 1.62 ms | 1.64 ms | 91.66 µs | 1.00× | `1777776444435777780` |
+| Go | ✅ | 2.89 ms | 2.90 ms | 3.00 ms | 146.09 µs | 1.87× | `1777776444435777780` |
+| Python | ✅ | 357.86 ms | 358.65 ms | 359.09 ms | 1.45 ms | 230.64× | `1777776444435777780` |
 
 ### enum_eval — Enum / pattern matching (AST evaluation)
 
@@ -137,11 +137,11 @@ Build a recursive arithmetic expression tree of depth D and evaluate it N times 
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 583.14 ms | 621.37 ms | 629.26 ms | 41.78 ms | 4.38× | `0` |
-| C++ | ✅ | 133.25 ms | 136.36 ms | 135.58 ms | 2.02 ms | 1.00× | `0` |
-| Rust | ✅ | 226.28 ms | 243.86 ms | 243.01 ms | 10.48 ms | 1.70× | `0` |
-| Go | ✅ | 188.05 ms | 203.83 ms | 202.67 ms | 8.97 ms | 1.41× | `0` |
-| Python | ✅ | 5.215 s | 5.277 s | 5.276 s | 48.34 ms | 39.14× | `0` |
+| Cangjie | ✅ | 516.12 ms | 546.29 ms | 538.97 ms | 14.77 ms | 4.00× | `0` |
+| C++ | ✅ | 129.12 ms | 129.42 ms | 129.71 ms | 737.81 µs | 1.00× | `0` |
+| Rust | ✅ | 193.13 ms | 195.60 ms | 195.26 ms | 2.05 ms | 1.50× | `0` |
+| Go | ✅ | 174.10 ms | 174.83 ms | 175.03 ms | 1.05 ms | 1.35× | `0` |
+| Python | ✅ | 5.245 s | 5.270 s | 5.281 s | 30.41 ms | 40.62× | `0` |
 
 ### regex_search — Regex find-all (stdlib regex)
 
@@ -151,11 +151,11 @@ Run a non-trivial alternation regex (date | email | capitalized word) across REP
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 45.60 ms | 45.82 ms | 45.94 ms | 389.77 µs | 22.73× | `36000` |
-| C++ | ✅ | 77.83 ms | 77.90 ms | 78.09 ms | 413.65 µs | 38.80× | `36000` |
-| Rust | ✅ | 2.01 ms | 2.09 ms | 2.10 ms | 66.93 µs | 1.00× | `36000` |
-| Go | ✅ | 103.34 ms | 104.41 ms | 104.27 ms | 578.57 µs | 51.52× | `36000` |
-| Python | ✅ | 41.63 ms | 42.12 ms | 42.08 ms | 365.59 µs | 20.75× | `36000` |
+| Cangjie | ✅ | 45.57 ms | 45.90 ms | 45.99 ms | 339.24 µs | 22.91× | `36000` |
+| C++ | ✅ | 77.69 ms | 77.75 ms | 82.99 ms | 11.54 ms | 39.05× | `36000` |
+| Rust | ✅ | 1.99 ms | 2.13 ms | 2.31 ms | 532.51 µs | 1.00× | `36000` |
+| Go | ✅ | 100.83 ms | 102.87 ms | 102.52 ms | 1.57 ms | 50.69× | `36000` |
+| Python | ✅ | 42.00 ms | 42.19 ms | 42.32 ms | 399.95 µs | 21.11× | `36000` |
 
 ### math_loop — Math-intensive loop (sin/cos/sqrt/exp)
 
@@ -165,11 +165,11 @@ Sum sin(x)*cos(x)+sqrt(x+1)-exp(-x) over N points. Stresses the math standard li
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 140.38 ms | 140.68 ms | 140.68 ms | 273.63 µs | 1.65× | `4704337083537` |
-| C++ | ✅ | 86.27 ms | 86.85 ms | 86.71 ms | 391.18 µs | 1.02× | `4704337083537` |
-| Rust | ✅ | 84.96 ms | 85.00 ms | 85.22 ms | 418.68 µs | 1.00× | `4704337083537` |
-| Go | ✅ | 144.94 ms | 145.10 ms | 145.14 ms | 155.69 µs | 1.71× | `4704337083537` |
-| Python | ✅ | 916.98 ms | 922.02 ms | 922.73 ms | 5.59 ms | 10.79× | `4704337083537` |
+| Cangjie | ✅ | 140.76 ms | 140.91 ms | 140.89 ms | 76.67 µs | 1.67× | `4704337083537` |
+| C++ | ✅ | 86.05 ms | 86.25 ms | 86.22 ms | 149.19 µs | 1.02× | `4704337083537` |
+| Rust | ✅ | 84.40 ms | 84.65 ms | 84.69 ms | 239.59 µs | 1.00× | `4704337083537` |
+| Go | ✅ | 144.27 ms | 144.49 ms | 144.80 ms | 621.87 µs | 1.71× | `4704337083537` |
+| Python | ✅ | 916.04 ms | 917.74 ms | 919.28 ms | 3.40 ms | 10.85× | `4704337083537` |
 
 ### prime_sieve — Sieve of Eratosthenes
 
@@ -179,11 +179,11 @@ Classic Sieve of Eratosthenes up to N on a one-byte-per-cell boolean array, then
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 1.561 s | 1.632 s | 1.624 s | 49.54 ms | 29.24× | `1156745585` |
-| C++ | ✅ | 53.53 ms | 55.23 ms | 56.24 ms | 2.61 ms | 1.00× | `1156745585` |
-| Rust | ✅ | 61.27 ms | 66.07 ms | 65.52 ms | 3.26 ms | 1.15× | `1156745585` |
-| Go | ✅ | 53.37 ms | 53.84 ms | 54.68 ms | 2.36 ms | 1.00× | `1156745585` |
-| Python | ✅ | 2.828 s | 2.849 s | 3.021 s | 390.83 ms | 53.00× | `1156745585` |
+| Cangjie | ✅ | 1.609 s | 1.648 s | 1.635 s | 21.36 ms | 28.83× | `1156745585` |
+| C++ | ✅ | 55.81 ms | 56.16 ms | 56.13 ms | 249.45 µs | 1.00× | `1156745585` |
+| Rust | ✅ | 67.68 ms | 68.72 ms | 68.64 ms | 846.82 µs | 1.21× | `1156745585` |
+| Go | ✅ | 59.64 ms | 59.85 ms | 60.33 ms | 799.72 µs | 1.07× | `1156745585` |
+| Python | ✅ | 2.829 s | 2.855 s | 2.851 s | 15.34 ms | 50.69× | `1156745585` |
 
 ### quicksort — Hand-written quicksort
 
@@ -193,11 +193,11 @@ Lomuto-partition quicksort with middle-element pivot and recurse-smaller-side / 
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 2.289 s | 2.306 s | 2.306 s | 16.34 ms | 20.53× | `612429648` |
-| C++ | ✅ | 111.48 ms | 112.05 ms | 112.22 ms | 706.30 µs | 1.00× | `612429648` |
-| Rust | ✅ | 115.80 ms | 115.97 ms | 116.02 ms | 205.91 µs | 1.04× | `612429648` |
-| Go | ✅ | 120.65 ms | 120.89 ms | 120.94 ms | 248.94 µs | 1.08× | `612429648` |
-| Python | ✅ | 3.808 s | 3.946 s | 3.939 s | 87.26 ms | 34.15× | `612429648` |
+| Cangjie | ✅ | 2.265 s | 2.326 s | 2.311 s | 43.27 ms | 20.29× | `612429648` |
+| C++ | ✅ | 111.62 ms | 111.89 ms | 111.80 ms | 144.31 µs | 1.00× | `612429648` |
+| Rust | ✅ | 116.12 ms | 116.17 ms | 116.71 ms | 1.13 ms | 1.04× | `612429648` |
+| Go | ✅ | 120.96 ms | 121.08 ms | 121.16 ms | 204.70 µs | 1.08× | `612429648` |
+| Python | ✅ | 3.607 s | 3.714 s | 3.701 s | 88.92 ms | 32.31× | `612429648` |
 
 ### mandelbrot — Mandelbrot set (numerical kernel)
 
@@ -207,11 +207,11 @@ Compute a Mandelbrot escape-time bitmap of size W*W with up to MAX_ITER iteratio
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 251.84 ms | 251.90 ms | 251.95 ms | 104.97 µs | 2.77× | `29624109` |
-| C++ | ✅ | 90.78 ms | 90.94 ms | 91.07 ms | 361.64 µs | 1.00× | `29624109` |
-| Rust | ✅ | 91.43 ms | 91.80 ms | 91.80 ms | 304.40 µs | 1.01× | `29624109` |
-| Go | ✅ | 91.16 ms | 91.20 ms | 91.22 ms | 66.18 µs | 1.00× | `29624109` |
-| Python | ✅ | 3.465 s | 3.486 s | 3.491 s | 19.73 ms | 38.17× | `29624109` |
+| Cangjie | ✅ | 251.74 ms | 251.93 ms | 251.90 ms | 124.13 µs | 2.77× | `29624109` |
+| C++ | ✅ | 90.86 ms | 90.87 ms | 90.88 ms | 31.68 µs | 1.00× | `29624109` |
+| Rust | ✅ | 91.70 ms | 91.73 ms | 91.76 ms | 72.75 µs | 1.01× | `29624109` |
+| Go | ✅ | 91.22 ms | 91.31 ms | 91.31 ms | 67.66 µs | 1.00× | `29624109` |
+| Python | ✅ | 3.455 s | 3.490 s | 4.664 s | 2.656 s | 38.02× | `29624109` |
 
 ### nbody — N-Body simulation (numerical kernel)
 
@@ -221,11 +221,11 @@ Symplectic integrator for the classic 5-body solar system from the Benchmarks Ga
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 78.81 ms | 78.83 ms | 78.85 ms | 50.91 µs | 8.59× | `-169083713` |
-| C++ | ✅ | 14.36 ms | 14.37 ms | 14.38 ms | 15.90 µs | 1.57× | `-169083713` |
-| Rust | ✅ | 9.17 ms | 9.31 ms | 9.36 ms | 202.46 µs | 1.00× | `-169083713` |
-| Go | ✅ | 15.04 ms | 15.33 ms | 15.29 ms | 246.18 µs | 1.64× | `-169083713` |
-| Python | ✅ | 1.161 s | 1.183 s | 1.188 s | 23.70 ms | 126.61× | `-169083713` |
+| Cangjie | ✅ | 78.90 ms | 79.01 ms | 80.56 ms | 2.20 ms | 8.59× | `-169083713` |
+| C++ | ✅ | 13.84 ms | 14.14 ms | 14.13 ms | 230.87 µs | 1.51× | `-169083713` |
+| Rust | ✅ | 9.19 ms | 9.24 ms | 9.34 ms | 182.54 µs | 1.00× | `-169083713` |
+| Go | ✅ | 14.99 ms | 15.51 ms | 15.41 ms | 238.70 µs | 1.63× | `-169083713` |
+| Python | ✅ | 1.162 s | 1.185 s | 1.196 s | 36.68 ms | 126.49× | `-169083713` |
 
 ### binary_trees — Binary trees (allocation / GC pressure)
 
@@ -235,11 +235,11 @@ Build and check many small balanced binary trees up to depth D. Adapted from the
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 116.15 ms | 119.56 ms | 118.94 ms | 1.63 ms | 1.79× | `13250584224` |
-| C++ | ✅ | 66.65 ms | 67.35 ms | 67.19 ms | 455.73 µs | 1.03× | `13250584224` |
-| Rust | ✅ | 64.97 ms | 65.58 ms | 65.62 ms | 512.13 µs | 1.00× | `13250584224` |
-| Go | ✅ | 93.32 ms | 94.03 ms | 93.97 ms | 580.05 µs | 1.44× | `13250584224` |
-| Python | ✅ | 855.13 ms | 865.90 ms | 865.73 ms | 8.57 ms | 13.16× | `13250584224` |
+| Cangjie | ✅ | 115.89 ms | 120.52 ms | 119.94 ms | 2.38 ms | 1.76× | `13250584224` |
+| C++ | ✅ | 67.13 ms | 67.31 ms | 67.45 ms | 356.77 µs | 1.02× | `13250584224` |
+| Rust | ✅ | 65.73 ms | 66.45 ms | 66.85 ms | 1.66 ms | 1.00× | `13250584224` |
+| Go | ✅ | 92.91 ms | 93.73 ms | 93.87 ms | 921.14 µs | 1.41× | `13250584224` |
+| Python | ✅ | 847.46 ms | 854.44 ms | 853.28 ms | 3.94 ms | 12.89× | `13250584224` |
 
 ### matrix_multiply — Matrix multiplication (naive O(N^3))
 
@@ -249,11 +249,11 @@ Compute C = A * B for two NxN double-precision matrices using the textbook tripl
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 874.82 ms | 905.61 ms | 900.78 ms | 15.82 ms | 236.59× | `15315135000` |
-| C++ | ✅ | 10.19 ms | 10.28 ms | 10.53 ms | 399.66 µs | 2.76× | `15315135000` |
-| Rust | ✅ | 3.70 ms | 3.73 ms | 3.86 ms | 255.36 µs | 1.00× | `15315135000` |
-| Go | ✅ | 10.42 ms | 11.32 ms | 11.14 ms | 438.51 µs | 2.82× | `15315135000` |
-| Python | ✅ | 722.18 ms | 733.81 ms | 733.04 ms | 7.42 ms | 195.31× | `15315135000` |
+| Cangjie | ✅ | 884.58 ms | 892.54 ms | 898.69 ms | 15.54 ms | 235.48× | `15315135000` |
+| C++ | ✅ | 10.35 ms | 11.00 ms | 10.91 ms | 317.66 µs | 2.76× | `15315135000` |
+| Rust | ✅ | 3.76 ms | 3.83 ms | 3.94 ms | 300.69 µs | 1.00× | `15315135000` |
+| Go | ✅ | 10.43 ms | 11.41 ms | 11.22 ms | 444.35 µs | 2.78× | `15315135000` |
+| Python | ✅ | 725.68 ms | 728.72 ms | 737.71 ms | 23.14 ms | 193.18× | `15315135000` |
 
 ### word_count — Word count (text processing)
 
@@ -263,11 +263,11 @@ Tokenize a synthesized N-word text and count word frequencies in a hash-map. Str
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 727.98 ms | 740.21 ms | 742.19 ms | 12.34 ms | 28.94× | `638309952` |
-| C++ | ✅ | 27.02 ms | 27.51 ms | 27.79 ms | 833.75 µs | 1.07× | `638309952` |
-| Rust | ✅ | 25.98 ms | 26.03 ms | 26.06 ms | 79.21 µs | 1.03× | `638309952` |
-| Go | ✅ | 25.16 ms | 27.13 ms | 26.40 ms | 1.03 ms | 1.00× | `638309952` |
-| Python | ✅ | 135.81 ms | 136.04 ms | 136.26 ms | 594.47 µs | 5.40× | `638309952` |
+| Cangjie | ✅ | 723.62 ms | 729.08 ms | 733.48 ms | 10.88 ms | 28.81× | `638309952` |
+| C++ | ✅ | 27.23 ms | 27.80 ms | 27.76 ms | 409.41 µs | 1.08× | `638309952` |
+| Rust | ✅ | 25.99 ms | 26.08 ms | 26.10 ms | 97.30 µs | 1.03× | `638309952` |
+| Go | ✅ | 25.11 ms | 25.35 ms | 25.38 ms | 213.80 µs | 1.00× | `638309952` |
+| Python | ✅ | 134.97 ms | 135.46 ms | 135.34 ms | 328.61 µs | 5.37× | `638309952` |
 
 ### spectral_norm — Spectral norm (CLBG numerical kernel)
 
@@ -277,11 +277,11 @@ Approximates the largest eigenvalue of an infinite matrix A[i][j] = 1 / ((i+j)(i
 
 | Language | Status | min | median | mean | stddev | vs fastest | Checksum |
 |----------|--------|-----|--------|------|--------|------------|----------|
-| Cangjie | ✅ | 2.223 s | 2.240 s | 2.249 s | 27.64 ms | 17.27× | `1274224151` |
-| C++ | ✅ | 128.74 ms | 128.86 ms | 128.88 ms | 128.37 µs | 1.00× | `1274224151` |
-| Rust | ✅ | 129.39 ms | 129.43 ms | 129.46 ms | 107.83 µs | 1.01× | `1274224151` |
-| Go | ✅ | 129.51 ms | 129.90 ms | 129.85 ms | 252.76 µs | 1.01× | `1274224151` |
-| Python | ✅ | 15.449 s | 15.630 s | 15.655 s | 165.85 ms | 120.00× | `1274224151` |
+| Cangjie | ✅ | 2.230 s | 2.234 s | 2.244 s | 17.18 ms | 17.32× | `1274224151` |
+| C++ | ✅ | 128.76 ms | 128.90 ms | 128.85 ms | 70.74 µs | 1.00× | `1274224151` |
+| Rust | ✅ | 129.41 ms | 129.58 ms | 129.57 ms | 119.19 µs | 1.01× | `1274224151` |
+| Go | ✅ | 129.59 ms | 129.77 ms | 129.76 ms | 169.07 µs | 1.01× | `1274224151` |
+| Python | ✅ | 15.475 s | 15.536 s | 15.606 s | 163.98 ms | 120.19× | `1274224151` |
 
 ## Methodology
 

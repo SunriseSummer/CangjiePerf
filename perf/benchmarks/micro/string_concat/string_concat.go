@@ -3,11 +3,16 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 )
+
+// Average bytes appended per iteration: "frag" (4) + decimal digits (~7) + ';'.
+// Used only as a capacity hint for strings.Builder.
+const bytesPerIter = 12
 
 func main() {
 	n := int64(500_000)
@@ -17,12 +22,12 @@ func main() {
 	}
 	t0 := time.Now()
 	var sb strings.Builder
-	// Bounds-checked capacity hint: only call Grow when the requested size
-	// fits comfortably in `int`. For realistic benchmark sizes this branch
-	// is always taken; the check exists purely to make the int64→int
-	// conversion provably safe.
-	if n > 0 && n <= int64(^uint(0)>>1)/12 {
-		sb.Grow(int(n) * 12)
+	// Capacity hint, with explicit bounds so the int64→int conversion can
+	// never silently truncate. ``math.MaxInt32`` is well above any realistic
+	// benchmark input but small enough that ``int(n) * bytesPerIter`` cannot
+	// overflow ``int`` on either 32-bit or 64-bit platforms.
+	if n > 0 && n <= math.MaxInt32 {
+		sb.Grow(int(n) * bytesPerIter)
 	}
 	for i := int64(0); i < n; i++ {
 		sb.WriteString("frag")
