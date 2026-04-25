@@ -83,11 +83,13 @@ def _benchmark_table(bench: dict[str, Any]) -> str:
     return "\n".join(rows + ([""] + notes if notes else []))
 
 
-def _summary_chart(report: dict[str, Any]) -> str:
+def summary_chart(report: dict[str, Any]) -> str:
     """Render a grouped log-scale bar chart of all benchmark timings as SVG.
 
-    GitHub markdown renders inline SVG, so the chart is embedded directly in
-    `report.md` and needs no images / external assets.
+    Returns a fully self-contained SVG document string. Callers should write
+    this to a file alongside `report.md` and reference it from the markdown
+    via a normal `![](path.svg)` image tag — GitHub-flavored markdown
+    sanitises raw inline `<svg>` blocks but does render linked SVG files.
     """
     # Collect (benchmark_name, {lang: min_ms}) for benchmarks where at least
     # one language has a successful result.
@@ -102,7 +104,7 @@ def _summary_chart(report: dict[str, Any]) -> str:
             rows.append((bench["name"], per_lang))
 
     if not rows:
-        return "_(no successful results — chart skipped)_"
+        return ""
 
     # Layout constants.
     n_groups = len(rows)
@@ -143,10 +145,12 @@ def _summary_chart(report: dict[str, Any]) -> str:
         return f"{ms * 1000:g} µs"
 
     parts: list[str] = []
+    parts.append('<?xml version="1.0" encoding="UTF-8"?>\n')
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" '
         f'viewBox="0 0 {width} {height}" '
-        f'width="100%" role="img" aria-label="Benchmark timings (log scale)" '
+        f'width="{width}" height="{height}" '
+        f'role="img" aria-label="Benchmark timings (log scale)" '
         f'font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif" '
         f'font-size="11">'
     )
@@ -237,8 +241,41 @@ def _summary_chart(report: dict[str, Any]) -> str:
     return "".join(parts)
 
 
+def _bench_min(bench: dict[str, Any], lang: str) -> float | None:
+    """Return min_ms for `lang` in `bench`, or None if not successful."""
+    r = bench["results"].get(lang)
+    if r and r.get("success") and r.get("summary"):
+        return r["summary"]["min_ms"]
+    return None
+
+
+def cangjie_closer_to_python(bench: dict[str, Any]) -> bool:
+    """Return True iff Cangjie's min_ms is closer (on a log scale) to Python's
+    than to C++'s — i.e. Cangjie is under-performing relative to native code.
+
+    Comparing in log-space matches how readers visually compare orders of
+    magnitude on the chart. Rows that satisfy this predicate are highlighted
+    (bolded) in the summary table and discussed in `analyse.md`.
+    """
+    cj = _bench_min(bench, "cangjie")
+    cpp = _bench_min(bench, "cpp")
+    py = _bench_min(bench, "python")
+    if cj is None or cpp is None or py is None:
+        return False
+    if cj <= 0 or cpp <= 0 or py <= 0:
+        return False
+    log_cj = _math.log(cj)
+    log_cpp = _math.log(cpp)
+    log_py = _math.log(py)
+    return abs(log_cj - log_py) < abs(log_cj - log_cpp)
+
+
 def _summary_table(report: dict[str, Any]) -> str:
-    """Top-level matrix: one row per benchmark, one column per language."""
+    """Top-level matrix: one row per benchmark, one column per language.
+
+    Rows where Cangjie is closer to Python than to C++ (log scale) are
+    rendered fully bold to flag them for follow-up analysis.
+    """
     rows = ["| Benchmark | Category | " + " | ".join(_LANG_LABEL[l] for l in _LANG_ORDER)
             + " | Fastest |"]
     rows.append("|" + "---|" * (3 + len(_LANG_ORDER)))
@@ -259,12 +296,31 @@ def _summary_table(report: dict[str, Any]) -> str:
             fastest = _LANG_LABEL[best_lang]
         else:
             fastest = "—"
-        rows.append(
-            f"| **{bench['name']}** | {bench['category']} | "
-            + " | ".join(cells)
-            + f" | {fastest} |"
-        )
+
+        bold = cangjie_closer_to_python(bench)
+
+        def maybe_bold(s: str) -> str:
+            return f"**{s}**" if bold and s not in ("—", "❌") else s
+
+        name_cell = f"**{bench['name']}**"  # benchmark name is always bold
+        if bold:
+            # Wrap every cell in **...** to bold the whole row.
+            cat_cell = f"**{bench['category']}**"
+            value_cells = " | ".join(maybe_bold(c) for c in cells)
+            fastest_cell = f"**{fastest}**"
+            rows.append(
+                f"| {name_cell} ⚠️ | {cat_cell} | {value_cells} | {fastest_cell} |"
+            )
+        else:
+            rows.append(
+                f"| {name_cell} | {bench['category']} | "
+                + " | ".join(cells)
+                + f" | {fastest} |"
+            )
     return "\n".join(rows)
+
+
+CHART_FILENAME = "report_chart.svg"
 
 
 def render(report: dict[str, Any]) -> str:
@@ -310,16 +366,27 @@ def render(report: dict[str, Any]) -> str:
     lines.append("")
     lines.append(_summary_table(report))
     lines.append("")
+    lines.append(
+        "> **Bold rows** marked with ⚠️ are benchmarks where Cangjie's timing "
+        "is closer (in log scale) to Python's than to C++'s — i.e. cases "
+        "where the Cangjie implementation is significantly under-performing "
+        "the native baseline. See [`analyse.md`](./analyse.md) for the "
+        "root-cause analysis."
+    )
+    lines.append("")
     lines.append("### Visual comparison")
     lines.append("")
     lines.append(
         "Each benchmark shows three side-by-side bars (Cangjie / C++ / Python). "
         "**Lower bars are faster.** Note the **logarithmic** y-axis: a one-step "
-        "gridline difference is a 10× speed difference. Hover any bar to see "
-        "its exact timing."
+        "gridline difference is a 10× speed difference. Open the SVG in a new "
+        "tab to see exact per-bar tooltips."
     )
     lines.append("")
-    lines.append(_summary_chart(report))
+    lines.append(
+        f"![Benchmark wall-clock comparison (log scale, lower is better)]"
+        f"(./{CHART_FILENAME})"
+    )
     lines.append("")
     lines.append("## Per-benchmark Detail")
     lines.append("")

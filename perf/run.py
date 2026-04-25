@@ -201,6 +201,15 @@ def main() -> int:
     Path(args.output).write_text(md, encoding="utf-8")
     print(f"Report      -> {args.output}")
 
+    # Write the bar chart as a sibling SVG file. GitHub-flavored markdown
+    # sanitises raw inline `<svg>` blocks but does render linked SVG via an
+    # image reference, so the chart is kept as a separate file.
+    chart_path = Path(args.output).parent / reporter.CHART_FILENAME
+    chart_svg = reporter.summary_chart(report)
+    if chart_svg:
+        chart_path.write_text(chart_svg, encoding="utf-8")
+        print(f"Chart       -> {chart_path}")
+
     # Exit non-zero only if every measured run failed (so CI can detect total
     # breakage, but individual missing toolchains are tolerated).
     any_success = any(
