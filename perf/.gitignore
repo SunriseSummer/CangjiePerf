@@ -3,3 +3,5 @@
 /report.md
 !/build/.gitkeep
 !/results/.gitkeep
+__pycache__/
+*.py[cod]
