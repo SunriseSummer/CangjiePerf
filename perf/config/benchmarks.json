@@ -1,7 +1,7 @@
 {
   "_comment": [
     "Benchmark catalog for CangjiePerf.",
-    "Each benchmark is implemented in three languages (Cangjie/Python/C++).",
+    "Each benchmark is implemented in five languages (Cangjie/C++/Rust/Go/Python).",
     "Each implementation prints exactly two trailing lines to stdout:",
     "  CHECKSUM:<string>",
     "  ELAPSED_MS:<float>",
@@ -15,7 +15,7 @@
   "defaults": {
     "warmup": 1,
     "iterations": 5,
-    "languages": ["cangjie", "python", "cpp"]
+    "languages": ["cangjie", "cpp", "rust", "go", "python"]
   },
   "benchmarks": [
     {

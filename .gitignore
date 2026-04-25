@@ -5,3 +5,6 @@ perf/benchmarks/**/target/
 perf/benchmarks/**/cjpm.lock
 __pycache__/
 *.pyc
+
+# Stray Go / Rust toolchain caches if accidentally placed in the worktree
+root/

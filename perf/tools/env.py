@@ -48,6 +48,25 @@ def detect_cpp() -> Toolchain:
     return Toolchain("cpp", False, None, "not found")
 
 
+def detect_go() -> Toolchain:
+    binary = shutil.which("go")
+    if not binary:
+        return Toolchain("go", False, None, "not found")
+    return Toolchain("go", True, binary, _run_version([binary, "version"]))
+
+
+def detect_rust() -> Toolchain:
+    """Detect the Rust toolchain.
+
+    We drive Rust builds with ``rustc`` directly (single-file ``-O`` builds)
+    to mirror the flat ``<name>.cpp`` / ``<name>.go`` layout used elsewhere.
+    """
+    binary = shutil.which("rustc")
+    if not binary:
+        return Toolchain("rust", False, None, "not found")
+    return Toolchain("rust", True, binary, _run_version([binary, "--version"]))
+
+
 def detect_cangjie() -> Toolchain:
     """Detect the Cangjie toolchain.
 
@@ -70,8 +89,10 @@ def detect_cangjie() -> Toolchain:
 def detect_all() -> dict[str, Toolchain]:
     return {
         "cangjie": detect_cangjie(),
-        "python": detect_python(),
         "cpp": detect_cpp(),
+        "go": detect_go(),
+        "rust": detect_rust(),
+        "python": detect_python(),
     }
 
 

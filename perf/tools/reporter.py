@@ -6,11 +6,14 @@ import math as _math
 from typing import Any
 
 
-_LANG_LABEL = {"cangjie": "Cangjie", "python": "Python", "cpp": "C++"}
-_LANG_ORDER = ["cangjie", "cpp", "python"]
+_LANG_LABEL = {"cangjie": "Cangjie", "python": "Python", "cpp": "C++",
+               "go": "Go", "rust": "Rust"}
+_LANG_ORDER = ["cangjie", "cpp", "rust", "go", "python"]
 _LANG_COLOR = {
     "cangjie": "#d9534f",  # red
     "cpp":     "#5cb85c",  # green
+    "rust":    "#b7410e",  # rust orange-brown
+    "go":      "#00add8",  # gopher cyan
     "python":  "#5bc0de",  # blue
 }
 
@@ -342,6 +345,14 @@ def render(report: dict[str, Any]) -> str:
     lines.append("")
     lines.append("## Toolchains")
     lines.append("")
+    lines.append(
+        "The benchmark suite compares **Cangjie** against four reference "
+        "languages: **C++** and **Rust** as native-compiled baselines, **Go** "
+        "as a managed-runtime compiled baseline, and **Python** as a "
+        "scripting-language baseline. The exact toolchain versions used for "
+        "this run are:"
+    )
+    lines.append("")
     lines.append("| Language | Available | Version |")
     lines.append("|----------|-----------|---------|")
     for lang in _LANG_ORDER:
@@ -377,10 +388,10 @@ def render(report: dict[str, Any]) -> str:
     lines.append("### Visual comparison")
     lines.append("")
     lines.append(
-        "Each benchmark shows three side-by-side bars (Cangjie / C++ / Python). "
-        "**Lower bars are faster.** Note the **logarithmic** y-axis: a one-step "
-        "gridline difference is a 10× speed difference. Open the SVG in a new "
-        "tab to see exact per-bar tooltips."
+        "Each benchmark shows five side-by-side bars (Cangjie / C++ / Rust "
+        "/ Go / Python). **Lower bars are faster.** Note the **logarithmic** "
+        "y-axis: a one-step gridline difference is a 10× speed difference. "
+        "Open the SVG in a new tab to see exact per-bar tooltips."
     )
     lines.append("")
     lines.append(
@@ -420,7 +431,9 @@ def render(report: dict[str, Any]) -> str:
         "estimate of best-case wall-clock cost when other system noise is present."
     )
     lines.append(
-        "- Compiler flags: `g++ -O2 -std=c++17` for C++, `cjpm build` for "
+        "- Compiler flags: `g++ -O2 -std=c++17` for C++, `rustc -O "
+        "--edition=2021` (release-equivalent `opt-level=3`) for Rust, "
+        "`go build` (default release optimization) for Go, `cjpm build` for "
         "Cangjie (each benchmark's `cjpm.toml` sets "
         "`[profile.build] compile-option = \"-O2\"`), CPython 3 for Python "
         "(no `-O`), all with no extra runtime tuning."

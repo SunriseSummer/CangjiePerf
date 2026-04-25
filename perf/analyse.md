@@ -12,11 +12,21 @@ The intent is **not** to claim Cangjie cannot be fast — `fibonacci`, `nbody`,
 already land within a small constant factor of `g++ -O2`. The goal is to
 identify, per benchmark, where the gap most plausibly comes from.
 
+> **Note:** this analysis was originally written when the suite covered three
+> languages (Cangjie / C++ / Python). Two more compiled languages — **Rust**
+> (via `rustc -O`) and **Go** (via `go build`) — have since been added as
+> additional native-runtime baselines. The cross-language consistency audit
+> below now applies to all **five** implementations of every benchmark, and
+> their timings are visible in `report.md`. The Cangjie-vs-native gap analysis
+> in §2 is unchanged: where Cangjie is slow against `g++ -O2`, it is also
+> slow against `rustc -O` and (with a few exceptions like `sort` where Rust
+> beats C++ thanks to a specialised pattern-defeating quicksort) `go build`.
+
 ---
 
 ## 1. Cross-language consistency audit
 
-For every benchmark, the three language implementations were reviewed against
+For every benchmark, every language implementation was reviewed against
 the same checklist. The user's guidance is:
 
 > **Top-level logic must match across languages; the specific library
@@ -24,7 +34,7 @@ the same checklist. The user's guidance is:
 
 | Check | Pass criterion |
 |---|---|
-| Argument parsing | All three read the same `N`/`D` from `argv[1]` with the same default. |
+| Argument parsing | All implementations read the same `N`/`D` from `argv[1]` with the same default. |
 | Input generation | Identical seed, identical formula, identical order. Generation always **outside** the timed region (or always inside it) — never split across languages. |
 | Timed region | Same conceptual work bracketed by the start/stop clock. |
 | Iteration count | Same outer/inner loop bounds. |
@@ -32,21 +42,21 @@ the same checklist. The user's guidance is:
 | Checksum formula | Identical bit-for-bit so the runner's CHECKSUM-equality check enforces semantic equivalence. |
 
 **Verdict for all 16 benchmarks: CONSISTENT.** Every CHECKSUM matches across
-the three languages on every run, which is the strongest possible guarantee
+all five languages on every run, which is the strongest possible guarantee
 that the same computation is being measured.
 
 The only sub-stdlib substitutions are the kinds the user explicitly allowed
 (different library calls under identical top-level logic):
 
-| Benchmark | Python | C++ | Cangjie | Top-level logic identical? |
-|---|---|---|---|---|
-| sort | `list.sort()` | `std::sort` | `std.sort.sort` | yes — single stdlib sort call on identical input |
-| hashmap_ops | `dict` | `std::unordered_map` | `HashMap` | yes — N inserts then N lookups |
-| string_concat | `"".join(parts)` style is avoided; uses `list+append` to mirror builders | `std::string::append` | `StringBuilder.append` | yes — N appends then materialise once |
-| regex_search | `re.compile + finditer` | `std::regex + sregex_iterator` | `Regex + lazyFindAll` | yes — same pattern, same input string, count matches |
-| word_count | `str.split()` | hand-rolled tokeniser | `lazySplit("\n") + lazySplit(" ")` | yes — same word boundaries, same hash-map updates |
-| binary_trees | recursive `Node` class | `Node*` + `new`/`delete` | `class Node` + GC | yes — same depth schedule, same checksum |
-| spectral_norm / mandelbrot / nbody / matrix_multiply / quicksort / prime_sieve / fibonacci / enum_eval / math_loop / closure_sum | hand-written | hand-written | hand-written | yes — line-for-line equivalent |
+| Benchmark | Python | C++ | Rust | Go | Cangjie | Top-level logic identical? |
+|---|---|---|---|---|---|---|
+| sort | `list.sort()` | `std::sort` | `Vec::sort` | `sort.Slice` | `std.sort.sort` | yes — single stdlib sort call on identical input |
+| hashmap_ops | `dict` | `std::unordered_map` | `HashMap` | `map[string]int64` | `HashMap` | yes — N inserts then N lookups |
+| string_concat | `list+append`-style | `std::string::append` | `String::push_str` | `strings.Builder` | `StringBuilder.append` | yes — N appends then materialise once |
+| regex_search | `re.compile + finditer` | `std::regex + sregex_iterator` | hand-rolled scanner (no stdlib regex in Rust) | `regexp.FindAllStringIndex` | `Regex + lazyFindAll` | yes — same alternation, same input string, same match count |
+| word_count | `str.split()` | hand-rolled tokeniser | hand-rolled tokeniser | hand-rolled tokeniser | `lazySplit("\n") + lazySplit(" ")` | yes — same word boundaries, same hash-map updates |
+| binary_trees | recursive `Node` class | `Node*` + `new`/`delete` | `Box<Node>` | `*node` + GC | `class Node` + GC | yes — same depth schedule, same checksum |
+| spectral_norm / mandelbrot / nbody / matrix_multiply / quicksort / prime_sieve / fibonacci / enum_eval / math_loop / closure_sum | hand-written | hand-written | hand-written | hand-written | hand-written | yes — line-for-line equivalent |
 
 So we can read the comparison as a meaningful first-order signal about the
 **runtime / standard-library / compiler back-end**, not about algorithmic
