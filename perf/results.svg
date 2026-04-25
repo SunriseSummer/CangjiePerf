@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="280" viewBox="0 0 720 280">
+  <defs>
+    <style>
+      .title { font: bold 16px sans-serif; fill: #1a1a2e; }
+      .label { font: 14px sans-serif; fill: #333; }
+      .value { font: bold 13px sans-serif; fill: #fff; }
+      .axis  { font: 12px sans-serif; fill: #666; }
+      .bg    { fill: #f8f9fa; }
+      .grid  { stroke: #dde; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="280" rx="10" ry="10" class="bg"/>
+
+  <!-- Title -->
+  <text x="360" y="30" text-anchor="middle" class="title">Cangjie Benchmark Results (ms, lower is better)</text>
+
+  <!-- Grid lines at 500, 1000, 1500, 2000, 2500 ms -->
+  <!-- Scale: max=2768 ms → bar area width=520px (x=150 to x=670) -->
+  <!-- 1 ms = 520/2768 ≈ 0.1879 px -->
+
+  <!-- Grid line 500ms → x = 150 + 500*0.1879 = 244 -->
+  <line x1="244" y1="50" x2="244" y2="240" class="grid" stroke-dasharray="4,3"/>
+  <text x="244" y="255" text-anchor="middle" class="axis">500</text>
+
+  <!-- Grid line 1000ms → x = 150 + 1000*0.1879 = 338 -->
+  <line x1="338" y1="50" x2="338" y2="240" class="grid" stroke-dasharray="4,3"/>
+  <text x="338" y="255" text-anchor="middle" class="axis">1000</text>
+
+  <!-- Grid line 1500ms → x = 150 + 1500*0.1879 = 432 -->
+  <line x1="432" y1="50" x2="432" y2="240" class="grid" stroke-dasharray="4,3"/>
+  <text x="432" y="255" text-anchor="middle" class="axis">1500</text>
+
+  <!-- Grid line 2000ms → x = 150 + 2000*0.1879 = 526 -->
+  <line x1="526" y1="50" x2="526" y2="240" class="grid" stroke-dasharray="4,3"/>
+  <text x="526" y="255" text-anchor="middle" class="axis">2000</text>
+
+  <!-- Grid line 2500ms → x = 150 + 2500*0.1879 = 620 -->
+  <line x1="620" y1="50" x2="620" y2="240" class="grid" stroke-dasharray="4,3"/>
+  <text x="620" y="255" text-anchor="middle" class="axis">2500</text>
+
+  <!-- X-axis label -->
+  <text x="360" y="272" text-anchor="middle" class="axis">Time (ms)</text>
+
+  <!-- Bar: fibonacci  31.61 ms  → width = 31.61 * 0.1879 ≈ 6 px (too thin, show at min 20px for label) -->
+  <!-- Use width = max(6, 6) = 6 but show label outside -->
+  <rect x="150" y="65"  width="6"   height="40" rx="4" fill="#4e79a7"/>
+  <text x="150" y="60" class="label">fibonacci</text>
+  <text x="160" y="91" class="axis" fill="#333">31.61 ms</text>
+
+  <!-- Bar: mandelbrot 406.73 ms → width = 406.73 * 0.1879 ≈ 76 px -->
+  <rect x="150" y="130" width="76"  height="40" rx="4" fill="#f28e2b"/>
+  <text x="150" y="125" class="label">mandelbrot</text>
+  <text x="230" y="156" class="axis" fill="#333">406.73 ms</text>
+
+  <!-- Bar: nbody 2768.40 ms → width = 2768.40 * 0.1879 ≈ 520 px -->
+  <rect x="150" y="195" width="520" height="40" rx="4" fill="#59a14f"/>
+  <text x="150" y="190" class="label">nbody</text>
+  <text x="345" y="221" text-anchor="middle" class="value">2768.40 ms</text>
+
+  <!-- Y-axis baseline -->
+  <line x1="150" y1="50" x2="150" y2="240" stroke="#aaa" stroke-width="1.5"/>
+  <line x1="150" y1="240" x2="670" y2="240" stroke="#aaa" stroke-width="1.5"/>
+</svg>
