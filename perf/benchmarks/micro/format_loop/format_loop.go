@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -17,7 +18,13 @@ func main() {
 	}
 	t0 := time.Now()
 	var sb strings.Builder
-	sb.Grow(int(n) * 9)
+	// Capacity hint, with explicit bounds so the int64→int conversion can
+	// never silently truncate. ``math.MaxInt32`` is well above any realistic
+	// benchmark input but small enough that ``int(n) * 9`` cannot overflow
+	// ``int`` on either 32-bit or 64-bit platforms.
+	if n > 0 && n <= math.MaxInt32 {
+		sb.Grow(int(n) * 9)
+	}
 	for i := int64(0); i < n; i++ {
 		fmt.Fprintf(&sb, "%08d;", i)
 	}

@@ -15,120 +15,336 @@
   "defaults": {
     "warmup": 1,
     "iterations": 5,
-    "languages": ["cangjie", "cpp", "rust", "go", "python"]
+    "languages": [
+      "cangjie",
+      "cpp",
+      "rust",
+      "go",
+      "python"
+    ]
   },
   "benchmarks": [
     {
       "name": "fibonacci",
       "category": "micro",
+      "chart_group": "core",
       "title": "Recursive Fibonacci (function call / recursion)",
       "description": "Pure recursive fib(N). Stresses function-call overhead and integer arithmetic. No standard-library involvement beyond integers.",
-      "args": ["32"]
+      "args": [
+        "32"
+      ]
     },
     {
       "name": "sort",
       "category": "micro",
+      "chart_group": "core",
       "title": "Sort 2M integers (stdlib sort)",
       "description": "Generate 2,000,000 deterministic pseudo-random Int64 values then sort ascending using the language's standard sort. Stresses standard library sorting and dynamic arrays.",
-      "args": ["2000000"]
+      "args": [
+        "2000000"
+      ]
     },
     {
       "name": "hashmap_ops",
       "category": "micro",
+      "chart_group": "core",
       "title": "HashMap insert + lookup (stdlib hash table)",
       "description": "Insert N (string,int) pairs then look up the same N keys. Stresses hash maps, string hashing, and string allocation.",
-      "args": ["500000"]
+      "args": [
+        "500000"
+      ]
     },
     {
       "name": "string_concat",
       "category": "micro",
+      "chart_group": "core",
       "title": "String building (stdlib StringBuilder)",
       "description": "Build a single large string from N small fragments using the recommended efficient builder for each language. Stresses string buffers and memory growth.",
-      "args": ["500000"]
+      "args": [
+        "500000"
+      ]
     },
     {
       "name": "closure_sum",
       "category": "micro",
+      "chart_group": "core",
       "title": "Closure / higher-order pipeline",
       "description": "Apply a map -> filter -> reduce pipeline of closures over N integers. Stresses higher-order function dispatch, closure allocation, and integer arithmetic.",
-      "args": ["2000000"]
+      "args": [
+        "2000000"
+      ]
     },
     {
       "name": "enum_eval",
       "category": "micro",
+      "chart_group": "core",
       "title": "Enum / pattern matching (AST evaluation)",
       "description": "Build a recursive arithmetic expression tree of depth D and evaluate it N times via recursive pattern matching on a sum-type enum (Num | Add | Sub | Mul). Stresses algebraic data types, recursive calls, and tag dispatch.",
-      "args": ["18", "60"]
+      "args": [
+        "18",
+        "60"
+      ]
     },
     {
       "name": "regex_search",
       "category": "micro",
+      "chart_group": "core",
       "title": "Regex find-all (stdlib regex)",
       "description": "Run a non-trivial alternation regex (date | email | capitalized word) across REPEATS copies of a sample paragraph. Stresses the standard regex engine.",
-      "args": ["4000"]
+      "args": [
+        "4000"
+      ]
     },
     {
       "name": "math_loop",
       "category": "micro",
+      "chart_group": "core",
       "title": "Math-intensive loop (sin/cos/sqrt/exp)",
       "description": "Sum sin(x)*cos(x)+sqrt(x+1)-exp(-x) over N points. Stresses the math standard library and floating-point throughput.",
-      "args": ["5000000"]
+      "args": [
+        "5000000"
+      ]
     },
     {
       "name": "prime_sieve",
       "category": "micro",
+      "chart_group": "core",
       "title": "Sieve of Eratosthenes",
       "description": "Classic Sieve of Eratosthenes up to N on a one-byte-per-cell boolean array, then count primes and sum them mod 2^31. Algorithmically identical across all three languages: same loop bounds, same inner stride, same checksum formula.",
-      "args": ["20000000"]
+      "args": [
+        "20000000"
+      ]
     },
     {
       "name": "quicksort",
       "category": "micro",
+      "chart_group": "core",
       "title": "Hand-written quicksort",
       "description": "Lomuto-partition quicksort with middle-element pivot and recurse-smaller-side / iterate-larger-side, implemented by hand in all three languages so the algorithm itself is identical (complements the stdlib `sort` benchmark).",
-      "args": ["1500000"]
+      "args": [
+        "1500000"
+      ]
     },
     {
       "name": "mandelbrot",
       "category": "apps",
+      "chart_group": "core",
       "title": "Mandelbrot set (numerical kernel)",
       "description": "Compute a Mandelbrot escape-time bitmap of size W*W with up to MAX_ITER iterations. Inspired by the Computer Language Benchmarks Game. Stresses tight numeric loops and floating-point arithmetic.",
-      "args": ["600", "200"]
+      "args": [
+        "600",
+        "200"
+      ]
     },
     {
       "name": "nbody",
       "category": "apps",
+      "chart_group": "core",
       "title": "N-Body simulation (numerical kernel)",
       "description": "Symplectic integrator for the classic 5-body solar system from the Benchmarks Game over N steps. Stresses tight floating-point loops and array indexing.",
-      "args": ["200000"]
+      "args": [
+        "200000"
+      ]
     },
     {
       "name": "binary_trees",
       "category": "apps",
+      "chart_group": "core",
       "title": "Binary trees (allocation / GC pressure)",
       "description": "Build and check many small balanced binary trees up to depth D. Adapted from the Computer Language Benchmarks Game. Stresses small-object allocation and GC (or heap allocator).",
-      "args": ["14"]
+      "args": [
+        "14"
+      ]
     },
     {
       "name": "matrix_multiply",
       "category": "apps",
+      "chart_group": "core",
       "title": "Matrix multiplication (naive O(N^3))",
       "description": "Compute C = A * B for two NxN double-precision matrices using the textbook triple-loop algorithm. Stresses memory layout, FP multiply-add throughput, and cache behaviour.",
-      "args": ["250"]
+      "args": [
+        "250"
+      ]
     },
     {
       "name": "word_count",
       "category": "apps",
+      "chart_group": "core",
       "title": "Word count (text processing)",
       "description": "Tokenize a synthesized N-word text and count word frequencies in a hash-map. Stresses string slicing/comparison, hashing, and hash-map updates — a typical scripting workload.",
-      "args": ["1000000"]
+      "args": [
+        "1000000"
+      ]
     },
     {
       "name": "spectral_norm",
       "category": "apps",
+      "chart_group": "core",
       "title": "Spectral norm (CLBG numerical kernel)",
       "description": "Approximates the largest eigenvalue of an infinite matrix A[i][j] = 1 / ((i+j)(i+j+1)/2 + i + 1) via 10 power iterations of v <- A^T A v. Adapted from the Computer Language Benchmarks Game; algorithmically identical across all three languages.",
-      "args": ["1500"]
+      "args": [
+        "1500"
+      ]
+    },
+    {
+      "name": "bit_count",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "Population-count tight loop (bitwise / integer ops)",
+      "description": "Compute the population count (Hamming weight) of (i * 2654435761) for i = 0..N-1 via a hand-written 4-operation SWAR popcount kernel that is algorithmically identical across all five languages, and return the total bit count. Stresses bitwise / shift / multiply throughput on 64-bit integers without leaning on each language's stdlib popcount intrinsic.",
+      "args": [
+        "10000000"
+      ]
+    },
+    {
+      "name": "gcd_loop",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "Euclidean GCD tight loop (integer arithmetic)",
+      "description": "For each i = 1..N, compute gcd((i * 2654435761) mod 10^9, (i * 40503) mod 10^9 + 7) via the iterative Euclidean algorithm, and XOR-fold all results into a checksum. Stresses integer division / modulo throughput in a tight inner loop.",
+      "args": [
+        "1000000"
+      ]
+    },
+    {
+      "name": "xor_shift",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "xorshift64 PRNG tight loop (bit ops + state)",
+      "description": "Iterate the classic three-shift xorshift64 PRNG N times starting from a fixed seed and return the final state. Pure 64-bit shift / XOR throughput, no memory traffic or stdlib calls.",
+      "args": [
+        "50000000"
+      ]
+    },
+    {
+      "name": "string_split",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "Repeated stdlib String.split",
+      "description": "Build a fixed comma-separated 64-token string once, then split it REPEATS times using each language's stdlib split, folding the per-iteration token count and selected token length into a checksum. Stresses string parsing and small-array allocation in the standard library.",
+      "args": [
+        "20000"
+      ]
+    },
+    {
+      "name": "string_search",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "Repeated stdlib substring search (indexOf)",
+      "description": "Construct a fixed ~10 KB pseudo-random ASCII haystack, then count occurrences of a 5-character needle in a sliding loop using stdlib substring search (indexOf / find / Index), REPEATS times. Stresses string-search throughput without regex.",
+      "args": [
+        "50000"
+      ]
+    },
+    {
+      "name": "format_loop",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "Integer formatting + string-builder loop",
+      "description": "Format N integers (zero-padded to width 8) into a single growing string via the language's recommended efficient builder. Stresses integer-to-string formatting and string-buffer growth.",
+      "args": [
+        "500000"
+      ]
+    },
+    {
+      "name": "set_ops",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "HashSet insert + membership (stdlib)",
+      "description": "Insert N pseudo-random Int64 values into a hash set, then test membership of N more values from the same stream. Stresses hash-set inserts and lookups (the set-shaped complement to the hashmap_ops benchmark).",
+      "args": [
+        "500000"
+      ]
+    },
+    {
+      "name": "deque_ops",
+      "category": "micro",
+      "chart_group": "extended",
+      "title": "Dynamic-array push/pop tight loop",
+      "description": "Push N pseudo-random Int64 values onto each language's growable array (Cangjie ArrayList, C++ vector, Rust Vec, Go slice, Python list), then pop them all, XOR-folding popped values into a checksum. Stresses dynamic-array growth and end-removal.",
+      "args": [
+        "2000000"
+      ]
+    },
+    {
+      "name": "conway",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "Conway's Game of Life (cellular automaton)",
+      "description": "Simulate STEPS generations of Conway's Game of Life on a 200x200 toroidal grid initialised deterministically from an LCG, then count live cells. Stresses tight 2-D array indexing and integer arithmetic.",
+      "args": [
+        "200"
+      ]
+    },
+    {
+      "name": "knapsack_dp",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "0/1 knapsack DP (classic DP)",
+      "description": "Generate N items with deterministic weights and values from an LCG, then solve the 0/1 knapsack problem with capacity 4000 using a 1-D rolling DP array. Stresses tight integer DP loops and array updates.",
+      "args": [
+        "1500"
+      ]
+    },
+    {
+      "name": "levenshtein",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "Levenshtein edit-distance DP",
+      "description": "Compute the Levenshtein edit distance between two deterministic length-L strings drawn from an 8-letter alphabet via two LCG streams, using a 1-D rolling DP. Stresses tight DP inner loops and string indexing.",
+      "args": [
+        "1500"
+      ]
+    },
+    {
+      "name": "monte_carlo_pi",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "Integer Monte-Carlo PI estimation",
+      "description": "For N pseudo-random points (x, y) drawn from an LCG modulo R = 65536, count how many satisfy x*x + y*y <= R*R. Pure integer arithmetic, no floating-point, identical algorithm across all languages.",
+      "args": [
+        "5000000"
+      ]
+    },
+    {
+      "name": "histogram",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "Histogram bucketing (data-analysis kernel)",
+      "description": "Generate N pseudo-random integers via an LCG and bucket each into one of 1024 buckets, returning the XOR-fold of bucket counts. Stresses scatter-style array updates and integer hashing.",
+      "args": [
+        "5000000"
+      ]
+    },
+    {
+      "name": "dijkstra",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "Dense-graph Dijkstra SSSP",
+      "description": "Build a V*V adjacency matrix with deterministic LCG-derived integer weights, then run Dijkstra's single-source shortest-paths algorithm with an O(V^2) array-based priority. Stresses tight nested integer loops and array indexing.",
+      "args": [
+        "800"
+      ]
+    },
+    {
+      "name": "base64",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "Base64 encoder (byte-stream codec)",
+      "description": "Generate N deterministic bytes via an LCG, then encode them in base64 using a hand-written table-driven encoder, XOR-folding all output bytes into a checksum. Stresses byte-level bitwise operations and array indexing.",
+      "args": [
+        "2000000"
+      ]
+    },
+    {
+      "name": "crc32",
+      "category": "apps",
+      "chart_group": "extended",
+      "title": "CRC32 checksum (table-driven hashing)",
+      "description": "Generate N deterministic bytes via an LCG, then compute the IEEE 802.3 CRC32 byte-by-byte using a precomputed 256-entry lookup table. Identical algorithm across all five languages; stresses tight byte-loop throughput and table lookup.",
+      "args": [
+        "5000000"
+      ]
     }
   ]
 }

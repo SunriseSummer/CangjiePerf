@@ -27,6 +27,14 @@ The suite covers two flavors of comparison:
    * `math_loop` — `sin`/`cos`/`sqrt`/`exp` tight loop (math stdlib).
    * `prime_sieve` — Sieve of Eratosthenes (algorithmically identical in all 3 languages).
    * `quicksort` — hand-written Lomuto-partition quicksort (algorithmically identical in all 3 languages).
+   * `bit_count` — hand-written SWAR popcount tight loop (bitwise/integer ops).
+   * `gcd_loop` — Euclidean GCD tight loop (integer division/modulo throughput).
+   * `xor_shift` — xorshift64 PRNG tight loop (64-bit shift / XOR throughput).
+   * `string_split` — repeated stdlib `split` over a comma-separated token string.
+   * `string_search` — repeated stdlib substring search (`indexOf` / `find`).
+   * `format_loop` — integer formatting + string-builder loop.
+   * `set_ops` — `HashSet` insert + membership (the set-shaped complement of `hashmap_ops`).
+   * `deque_ops` — dynamic-array push/pop tight loop.
 2. **Application-style benchmarks** — small, realistic kernels in the spirit
    of the [Computer Language Benchmarks Game]:
    * `mandelbrot` — Mandelbrot escape-time bitmap.
@@ -35,10 +43,26 @@ The suite covers two flavors of comparison:
    * `matrix_multiply` — naive O(N³) double-precision matmul.
    * `word_count` — typical text-processing app (tokenize + hash-map count).
    * `spectral_norm` — power-iteration spectral norm (CLBG numerical kernel).
+   * `conway` — Conway's Game of Life on a 200×200 toroidal grid.
+   * `knapsack_dp` — 0/1 knapsack with a 1-D rolling DP array.
+   * `levenshtein` — Levenshtein edit-distance DP between two strings.
+   * `monte_carlo_pi` — integer-only Monte-Carlo PI estimation.
+   * `histogram` — bucket counts of LCG ints (data-analysis kernel).
+   * `dijkstra` — single-source shortest paths on a dense integer graph.
+   * `base64` — table-driven base64 encoder.
+   * `crc32` — IEEE 802.3 CRC32 with a 256-entry lookup table.
 
-The generated `report.md` includes a per-benchmark **comparison table** _and_ a
-**log-scale grouped bar chart** (inline SVG) so cross-language differences are
-immediately visible at a glance.
+Benchmarks are tagged with a `chart_group` (`core` for the original 16,
+`extended` for the additional 16). The generated `report.md` includes the
+per-benchmark **comparison tables** _and_ three **log-scale grouped bar
+charts** (linked SVGs):
+
+* `report_chart.svg` — all benchmarks in one chart.
+* `report_chart_core.svg` — only the original 16 benchmarks.
+* `report_chart_extended.svg` — only the additional 16 benchmarks.
+
+So cross-language differences are immediately visible at a glance, and you
+can compare the two waves of benchmarks side by side.
 
 [Computer Language Benchmarks Game]: https://benchmarksgame-team.pages.debian.net/benchmarksgame/
 

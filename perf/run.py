@@ -204,11 +204,23 @@ def main() -> int:
     # Write the bar chart as a sibling SVG file. GitHub-flavored markdown
     # sanitises raw inline `<svg>` blocks but does render linked SVG via an
     # image reference, so the chart is kept as a separate file.
-    chart_path = Path(args.output).parent / reporter.CHART_FILENAME
+    out_dir = Path(args.output).parent
+    chart_path = out_dir / reporter.CHART_FILENAME
     chart_svg = reporter.summary_chart(report)
     if chart_svg:
         chart_path.write_text(chart_svg, encoding="utf-8")
         print(f"Chart       -> {chart_path}")
+    # Per-group charts: one for the original "core" 16 benchmarks and one
+    # for the additional "extended" 16 benchmarks. Skipped silently when
+    # the catalog has no benchmarks in the corresponding group.
+    for group, fname in (
+        ("core", reporter.CHART_FILENAME_CORE),
+        ("extended", reporter.CHART_FILENAME_EXTENDED),
+    ):
+        svg = reporter.summary_chart(report, chart_group=group)
+        if svg:
+            (out_dir / fname).write_text(svg, encoding="utf-8")
+            print(f"Chart       -> {out_dir / fname}")
 
     # Exit non-zero only if every measured run failed (so CI can detect total
     # breakage, but individual missing toolchains are tolerated).
