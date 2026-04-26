@@ -53,7 +53,7 @@ The benchmark suite compares **Cangjie** against four reference languages: **C++
 | **xor_shift** 🎉 | micro | 93.46 ms | 93.61 ms | 93.61 ms | 93.60 ms | 15.635 s | Cangjie |
 | **string_split** | micro | 20.65 ms | 23.13 ms | 19.42 ms | 14.43 ms | 31.59 ms | Go |
 | **string_search** 🎉 | micro | 97.58 ms | 399.07 ms | 254.62 ms | 676.77 ms | 128.02 ms | Cangjie |
-| **format_loop** ⚠️ | **micro** | **69.41 ms** | **33.71 ms** | **18.30 ms** | **50.73 ms** | **125.25 ms** | **Rust** |
+| **format_loop** | micro | 69.41 ms | 33.71 ms | 18.30 ms | 50.73 ms | 125.25 ms | Rust |
 | **set_ops** 🎉 | micro | 17.01 ms | 38.83 ms | 29.98 ms | 36.09 ms | 236.11 ms | Cangjie |
 | **deque_ops** | micro | 6.81 ms | 8.53 ms | 6.60 ms | 15.42 ms | 367.71 ms | Rust |
 | **conway** | apps | 35.69 ms | 34.52 ms | 22.82 ms | 62.82 ms | 3.256 s | Rust |
