@@ -22,6 +22,42 @@ identify, per benchmark, where the gap most plausibly comes from.
 > slow against `rustc -O` and (with a few exceptions like `sort` where Rust
 > beats C++ thanks to a specialised pattern-defeating quicksort) `go build`.
 
+> **2026-04 update — Cangjie SDK 1.0.5.** Most of the §2 sub-sections below
+> were written against an earlier Cangjie release. With `cjnative 1.0.5` the
+> situation has changed dramatically; the per-section "≈ Nx slower" headlines
+> are stale and should be read as **historical context**, not current fact.
+> The latest `report.md` is the source of truth. Headline deltas from the
+> most recent run:
+>
+> | §2.x benchmark | Old headline | Current Cangjie vs. C++ (cjnative 1.0.5) |
+> |---|---|---|
+> | 2.1 `sort`            | ≈ 15× slower than C++ | **still ≈ 16× slower** — the only major regression that remains |
+> | 2.2 `hashmap_ops`     | ≈ 4× slower than C++  | **now ≈ 1.7× faster than C++** ✅ |
+> | 2.3 `string_concat`   | ≈ 1.7× slower than C++ | ≈ 1.4× slower than C++ (small) |
+> | 2.4 `closure_sum`     | ≈ 10× slower than C++ | **now ≈ 4× faster than C++** ✅ |
+> | 2.5 `regex_search`    | marginally bolded     | **now ≈ 1.8× faster than C++** ✅ |
+> | 2.6 `prime_sieve`     | ≈ 30× slower than C++ | ≈ 1.2× slower than C++ ✅ |
+> | 2.7 `quicksort`       | ≈ 18× slower than C++ | ≈ 1.3× slower than C++ ✅ |
+> | 2.8 `matrix_multiply` | ≈ 80× slower than C++ | ≈ 1.5× slower than C++ ✅ |
+> | 2.9 `word_count`      | ≈ 32× slower than C++ | **still ≈ 6× slower** — second remaining regression |
+> | 2.10 `spectral_norm`  | ≈ 15× slower than C++ | ≈ 1.04× slower than C++ ✅ |
+>
+> So under SDK 1.0.5 the only ⚠️ rows that genuinely indicate Cangjie under-
+> performing native baselines are **`sort`** and **`word_count`**. The other
+> ⚠️ rows in the new report (`regex_search`, `string_search`) are bolded by
+> the log-distance heuristic only because Cangjie is essentially tied with
+> Python while the *fastest* native baseline (Rust) is exceptionally fast on
+> those workloads — Cangjie itself is not slow there (in `string_search`
+> Cangjie is in fact the **fastest** of all five implementations).
+>
+> The 16 newly-added benchmarks (`bit_count`, `gcd_loop`, `xor_shift`,
+> `string_split`, `string_search`, `format_loop`, `set_ops`, `deque_ops`,
+> `conway`, `knapsack_dp`, `levenshtein`, `monte_carlo_pi`, `histogram`,
+> `dijkstra`, `base64`, `crc32`) are all within a small constant factor
+> (typically ≤ 2×) of the fastest native baseline; several (`gcd_loop`,
+> `xor_shift`, `string_search`, `set_ops`, `deque_ops`, `histogram`) put
+> Cangjie at parity with or ahead of `g++ -O2`.
+
 ---
 
 ## 1. Cross-language consistency audit
