@@ -42,19 +42,19 @@ The benchmark suite compares **Cangjie** against four reference languages: **C++
 | **math_loop** | micro | 87.11 ms | 86.68 ms | 84.98 ms | 144.22 ms | 925.80 ms | Rust |
 | **prime_sieve** | micro | 63.36 ms | 53.11 ms | 64.70 ms | 56.49 ms | 2.814 s | C++ |
 | **quicksort** | micro | 141.75 ms | 111.33 ms | 115.64 ms | 121.08 ms | 3.346 s | C++ |
-| **mandelbrot** | apps | 90.39 ms | 90.76 ms | 91.42 ms | 91.08 ms | 3.445 s | Cangjie |
+| **mandelbrot** 🎉 | apps | 90.39 ms | 90.76 ms | 91.42 ms | 91.08 ms | 3.445 s | Cangjie |
 | **nbody** | apps | 16.80 ms | 13.89 ms | 9.20 ms | 14.95 ms | 1.177 s | Rust |
-| **binary_trees** | apps | 46.31 ms | 67.36 ms | 65.48 ms | 93.80 ms | 838.74 ms | Cangjie |
+| **binary_trees** 🎉 | apps | 46.31 ms | 67.36 ms | 65.48 ms | 93.80 ms | 838.74 ms | Cangjie |
 | **matrix_multiply** | apps | 16.15 ms | 11.02 ms | 3.78 ms | 10.44 ms | 728.50 ms | Rust |
 | **word_count** ⚠️ | **apps** | **173.10 ms** | **27.05 ms** | **25.96 ms** | **25.20 ms** | **134.37 ms** | **Go** |
 | **spectral_norm** | apps | 133.35 ms | 128.96 ms | 129.60 ms | 129.30 ms | 15.280 s | C++ |
 | **bit_count** | micro | 164.07 ms | 148.99 ms | 163.09 ms | 163.62 ms | 11.258 s | C++ |
-| **gcd_loop** | micro | 50.09 ms | 55.47 ms | 50.47 ms | 55.16 ms | 626.67 ms | Cangjie |
-| **xor_shift** | micro | 93.46 ms | 93.61 ms | 93.61 ms | 93.60 ms | 15.635 s | Cangjie |
+| **gcd_loop** 🎉 | micro | 50.09 ms | 55.47 ms | 50.47 ms | 55.16 ms | 626.67 ms | Cangjie |
+| **xor_shift** 🎉 | micro | 93.46 ms | 93.61 ms | 93.61 ms | 93.60 ms | 15.635 s | Cangjie |
 | **string_split** | micro | 20.65 ms | 23.13 ms | 19.42 ms | 14.43 ms | 31.59 ms | Go |
-| **string_search** | micro | 97.58 ms | 399.07 ms | 254.62 ms | 676.77 ms | 128.02 ms | Cangjie |
-| **format_loop** ⚠️ | **micro** | **69.41 ms** | **33.71 ms** | **18.30 ms** | **50.73 ms** | **125.25 ms** | **Rust** |
-| **set_ops** | micro | 17.01 ms | 38.83 ms | 29.98 ms | 36.09 ms | 236.11 ms | Cangjie |
+| **string_search** 🎉 | micro | 97.58 ms | 399.07 ms | 254.62 ms | 676.77 ms | 128.02 ms | Cangjie |
+| **format_loop** | micro | 69.41 ms | 33.71 ms | 18.30 ms | 50.73 ms | 125.25 ms | Rust |
+| **set_ops** 🎉 | micro | 17.01 ms | 38.83 ms | 29.98 ms | 36.09 ms | 236.11 ms | Cangjie |
 | **deque_ops** | micro | 6.81 ms | 8.53 ms | 6.60 ms | 15.42 ms | 367.71 ms | Rust |
 | **conway** | apps | 35.69 ms | 34.52 ms | 22.82 ms | 62.82 ms | 3.256 s | Rust |
 | **knapsack_dp** | apps | 5.32 ms | 3.80 ms | 4.14 ms | 4.14 ms | 412.62 ms | C++ |
