@@ -86,18 +86,23 @@ def _benchmark_table(bench: dict[str, Any]) -> str:
     return "\n".join(rows + ([""] + notes if notes else []))
 
 
-def summary_chart(report: dict[str, Any]) -> str:
+def summary_chart(report: dict[str, Any], chart_group: str | None = None) -> str:
     """Render a grouped log-scale bar chart of all benchmark timings as SVG.
 
     Returns a fully self-contained SVG document string. Callers should write
     this to a file alongside `report.md` and reference it from the markdown
     via a normal `![](path.svg)` image tag — GitHub-flavored markdown
     sanitises raw inline `<svg>` blocks but does render linked SVG files.
+
+    If ``chart_group`` is given, only benchmarks whose ``chart_group`` field
+    matches are included; otherwise all benchmarks are charted.
     """
     # Collect (benchmark_name, {lang: min_ms}) for benchmarks where at least
     # one language has a successful result.
     rows: list[tuple[str, dict[str, float]]] = []
     for bench in report["benchmarks"]:
+        if chart_group is not None and bench.get("chart_group") != chart_group:
+            continue
         per_lang: dict[str, float] = {}
         for lang in _LANG_ORDER:
             r = bench["results"].get(lang)
@@ -324,6 +329,8 @@ def _summary_table(report: dict[str, Any]) -> str:
 
 
 CHART_FILENAME = "report_chart.svg"
+CHART_FILENAME_CORE = "report_chart_core.svg"
+CHART_FILENAME_EXTENDED = "report_chart_extended.svg"
 
 
 def render(report: dict[str, Any]) -> str:
@@ -391,14 +398,58 @@ def render(report: dict[str, Any]) -> str:
         "Each benchmark shows five side-by-side bars (Cangjie / C++ / Rust "
         "/ Go / Python). **Lower bars are faster.** Note the **logarithmic** "
         "y-axis: a one-step gridline difference is a 10× speed difference. "
-        "Open the SVG in a new tab to see exact per-bar tooltips."
+        "Open an SVG in a new tab to see exact per-bar tooltips."
     )
+    lines.append("")
+    lines.append("**All benchmarks (combined):**")
     lines.append("")
     lines.append(
         f"![Benchmark wall-clock comparison (log scale, lower is better)]"
         f"(./{CHART_FILENAME})"
     )
     lines.append("")
+    # Detect which chart groups are present so we only emit the per-group
+    # charts when the catalog actually has both groups (the original
+    # 16-benchmark "core" set + the 16-benchmark "extended" set).
+    groups_present = {
+        b.get("chart_group") for b in report["benchmarks"] if b.get("chart_group")
+    }
+    if "core" in groups_present and "extended" in groups_present:
+        lines.append(
+            "The benchmark catalog is split into two groups for easier "
+            "side-by-side reading:"
+        )
+        lines.append("")
+        lines.append(
+            "1. **Core** (the original 16 benchmarks) — recursion, sort, "
+            "stdlib hash-map, string builder, closures, enum / pattern "
+            "matching, regex, math loop, prime sieve, hand-written "
+            "quicksort, Mandelbrot, n-body, binary trees, matrix multiply, "
+            "word count, spectral norm."
+        )
+        lines.append(
+            "2. **Extended** (the additional 16 benchmarks) — popcount loop, "
+            "GCD loop, xorshift64 PRNG, stdlib `split`/`indexOf`, integer "
+            "formatting, `HashSet` ops, dynamic-array push/pop, Conway's "
+            "Game of Life, 0/1 knapsack DP, Levenshtein DP, integer Monte "
+            "Carlo PI, histogram bucketing, dense-graph Dijkstra, base64 "
+            "encode, CRC32."
+        )
+        lines.append("")
+        lines.append("**Core benchmarks:**")
+        lines.append("")
+        lines.append(
+            f"![Core benchmark wall-clock comparison (log scale, lower is better)]"
+            f"(./{CHART_FILENAME_CORE})"
+        )
+        lines.append("")
+        lines.append("**Extended benchmarks:**")
+        lines.append("")
+        lines.append(
+            f"![Extended benchmark wall-clock comparison (log scale, lower is better)]"
+            f"(./{CHART_FILENAME_EXTENDED})"
+        )
+        lines.append("")
     lines.append("## Per-benchmark Detail")
     lines.append("")
     for bench in report["benchmarks"]:
